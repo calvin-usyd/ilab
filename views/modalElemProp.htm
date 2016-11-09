@@ -1,0 +1,372 @@
+<div class="modal fade" id="modalElemProp" tabindex="-1" role="dialog" aria-labelledby="modalElemPropLabel">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h4 class="modal-title" id="modalElemPropLabel">Element Properties</h4>
+	  </div>
+	  <div class="modal-body">
+		<!-- Nav tabs -->
+		  <ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#beamProp" aria-controls="Beam" role="tab" data-toggle="tab">Beam</a></li>
+			<li role="presentation"><a href="#plateProp" aria-controls="Plate" role="tab" data-toggle="tab">Plate</a></li>
+			<li role="presentation"><a href="#spolyProp" aria-controls="Spoly" role="tab" data-toggle="tab">SPOLY</a></li>
+			<li role="presentation"><a href="#spasProp" aria-controls="Spas" role="tab" data-toggle="tab">SPAS</a></li>
+			<li role="presentation"><a href="#listProp" aria-controls="List" role="tab" data-toggle="tab">List</a></li>
+		  </ul>
+
+		  <div class="row">
+		  <!-- Tab panes -->
+		  <div class="tab-content"><br/>
+			<div role="tabpanel" class="tab-pane active" id="beamProp">
+				<form class="form-horizontal well">
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Name:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="name" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Type:</label>
+						<div class="col-lg-6">
+							<select name="type" class="form-control">
+								<option value="truss">truss</option>
+								<option value="beam">beam</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form class="form-horizontal well">
+					<fieldset>
+						<legend>Material properties</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Young's modulus:</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="youngModulus"/>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Poisson's ratio:</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="poissonRatio"/>
+						  </div>
+						</div>
+					</fieldset>
+				</form>
+				<form class="form-horizontal well">
+					<fieldset>
+						<legend>Geometrical properties</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Area (A):</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="area"/>
+						  </div>
+						</div>
+						<div class="form-group inertia hide">
+						  <label class="col-lg-3 control-label">Moment of inertia (I):</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="moment"/>
+						  </div>
+						</div>
+					</fieldset>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary modalElemPropBtn" id="">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="plateProp">
+				<form class="form-horizontal well">
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Name:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="name" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Type:</label>
+						<div class="col-lg-6">
+							<select name="type" class="form-control">
+								<option value="plane strain">plane strain</option>
+								<option value="plane stress">plane stress</option>
+								<option value="plate">plate</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form class="form-horizontal well">
+					<fieldset>
+						<legend>Material properties</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Young's modulus:</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="youngModulus"/>
+						  </div>
+						</div>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Poisson's ratio:</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="poissonRatio"/>
+						  </div>
+						</div>
+					</fieldset>
+				</form>
+				<form class="form-horizontal well  geometric hide">
+				<!--div class="col-lg-12 geometric hide"-->
+					<fieldset>
+						<legend>Geometrical properties</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Thickness:</label>
+						  <div class="col-lg-6">
+							<input type="text" class="form-control" name="thickness"/>
+						  </div>
+						</div>
+					</fieldset>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary modalElemPropBtn" id="">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="spolyProp">
+				<form class="form-horizontal well">
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Name:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="name" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Normal contact stiffness:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="ncs" value="1e4"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Tangential contact stiffness:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="tcs" value="1e3"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Coefficient of friction:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="cof" value="0.5"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Coefficient of rolling:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="cor" value="0.0"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Normal coefficient of viscosity:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="ncov" value="400"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Tangential coefficient of viscosity:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="tcov"value="40"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Drag coefficient of viscosity:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="dcov" value="0"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Density:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="density" value="1"/>
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary modalElemPropBtn" id="">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="spasProp">
+				<form class="form-horizontal well">
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Material Property Id:</label>
+						<div class="col-lg-6">
+							<input type="number" class="form-control" name="mpId" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Name:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="name" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Molecule Diffusion (DO):</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="MOLECULAR_DIFFUSION" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Specific Storage:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="SPECIFIC_STORAGE" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Hydraulic Conductivity:</label>
+						<div class="col-lg-2">
+							Kxx: <input type="text" class="form-control" name="HYDRAULIC_CONDUCTIVITY_Kxx" value=""/>
+						</div>
+						<div class="col-lg-2">
+							Kxy: <input type="text" class="form-control" name="HYDRAULIC_CONDUCTIVITY_Kxy" value=""/>
+						</div>
+						<div class="col-lg-2">
+							Kyy: <input type="text" class="form-control" name="HYDRAULIC_CONDUCTIVITY_Kyy" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Dispersivity:</label>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="DISPERSIVITY1" value=""/>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="DISPERSIVITY2" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Dry Density:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="DRY_DENSITY" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Porosity:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="POROSITY" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Decay Half Life:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="DECAY_HALF_LIFE" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Add Seepage:</label>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="ADD_SEEPAGE1" value=""/>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="ADD_SEEPAGE2" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Transient Instantaneous Fraction:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="TRANSIENT_INSTANTANEOUS_FRACTION" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Transient Sorption Rate:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="TRANSIENT_SORPTION_RATE" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Diffusion:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="DIFFUSION" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Linear Sorption Coefficient:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="LINEAR_SORPTION_COEFFICIENT" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Transmissivity:</label>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="TRANSMISSIVITY1" value=""/>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="TRANSMISSIVITY2" value=""/>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="TRANSMISSIVITY3" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Sorption:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="SORPTION" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Replace Seepage:</label>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="REPLACE_SEEPAGE1" value=""/>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="REPLACE_SEEPAGE2" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Mass Interlayer Discontinuity Top:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="MASS_INTERLAYER_DISCONTINUITY_TOP" value=""/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Mass Interlayer Discontinuity Bottom:</label>
+						<div class="col-lg-6">
+							<input type="text" class="form-control" name="MASS_INTERLAYER_DISCONTINUITY_BOTTOM" value=""/>
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary modalSpasPropBtn" id="">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="listProp">				
+			  <ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#FinitePropList" aria-controls="FinitePropList" role="tab" data-toggle="tab">Finite</a></li>
+				<li role="presentation"><a href="#SpolyPropList" aria-controls="SpolyPropList" role="tab" data-toggle="tab">SPOLY</a></li>
+				<li role="presentation"><a href="#SpasPropList" aria-controls="SpasPropList" role="tab" data-toggle="tab">SPAS</a></li>
+			  </ul>
+
+			  <div class="row">
+			  <div class="col-lg-12">
+				<!-- Tab panes -->
+				<div class="tab-content"><br/>
+					<div role="tabpanel" class="tab-pane active" id="FinitePropList">
+						<div class="col-lg-12" id="hotPropFe"></div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="SpolyPropList">
+						N. = Normal<br>
+						T. = Tangential<br>
+						Coef. = Coefficient<br>
+						<div class="col-lg-12" id="hotPropDe"></div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="SpasPropList">
+						T. = Transient<br>
+						<div class="col-lg-12" id="hotPropSpas"></div>
+					</div>
+				</div>
+			  </div>
+			  </div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-info" id="modalElemPropEditBtn">Edit</button>
+				</div>
+			</div>
+		  </div>
+		  </div>
+	</div>
+  </div>
+</div>
+</div>
