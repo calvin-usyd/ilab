@@ -1,0 +1,297 @@
+<div class="modal fade" id="modalElemCons" tabindex="-1" role="dialog" aria-labelledby="modalElemConsLabel">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h4 class="modal-title" id="modalElemConsLabel">Element Constraint</h4>
+	  </div>
+	  <div class="modal-body">
+		<!-- Nav tabs -->
+		  <ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#nodeCons" role="tab" data-toggle="tab">Node</a></li>
+			<li role="presentation"><a href="#particleCons" role="tab" data-toggle="tab">Particle</a></li>
+			<li role="presentation"><a href="#spasCons" role="tab" data-toggle="tab" id="spasConsTab">SPAS</a></li>
+			<li role="presentation"><a href="#nodeConsList" role="tab" data-toggle="tab">Node List</a></li>
+			<li role="presentation"><a href="#particleConsList" role="tab" data-toggle="tab">Particle List</a></li>
+		  </ul>
+
+		  <div class="row">
+		  <!-- Tab panes -->
+		  <div class="tab-content"><br/>
+			<div role="tabpanel" class="tab-pane active" id="nodeCons">
+				<div class="row form-horizontal">
+					<div class="col-lg-12"><br/>
+						<div class="form-group">
+							<label class="col-lg-2 control-label  text-right">Name:</label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control" name="name" value=""/>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12"><br/>
+						<fieldset class="col-lg-3">
+						  <div class="col-lg-12 well">
+							<legend>Restrain</legend>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">x:</label>
+								<div class="col-lg-9 inputH">
+									<input type="number" name="x" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">y:</label>
+								<div class="col-lg-9 inputH">
+									<input type="number" name="y" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">z &Theta;:</label>
+								<div class="col-lg-9 inputH">
+									<input type="number" name="z" class="form-control"/>
+								</div>
+							</div>
+						  </div>
+						</fieldset>
+						<fieldset class="col-lg-3">
+						  <div class="col-lg-12 well">
+							<legend>Temperature</legend>
+							<div class="form-group">
+							  <label class="col-lg-4 control-label">Celcius:</label>
+							  <div class="col-lg-8">
+								<input type="text" class="form-control" name="temparature"/>
+							  </div>
+							</div>
+						  </div>
+						</fieldset>
+						<fieldset class="col-lg-3">
+						  <div class="col-lg-12 well">
+							<legend>Moment</legend>
+							<div class="form-group">
+							  <label class="col-lg-4 control-label">Meters:</label>
+							  <div class="col-lg-8">
+								<input type="text" class="form-control" name="moment"/>
+							  </div>
+							</div>
+						  </div>
+						</fieldset>
+						<fieldset class="col-lg-3">
+						  <div class="col-lg-12 well">
+							<legend>Load</legend>
+							<div class="form-group">
+							  <label class="col-lg-3 control-label">P:</label>
+							  <div class="col-lg-9">
+								<input type="text" class="form-control" name="p"/>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label class="col-lg-3 control-label">Q:</label>
+							  <div class="col-lg-9">
+								<input type="text" class="form-control" name="q"/>
+							  </div>
+							</div>
+						  </div>
+						</fieldset>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="nodeConsAddBtn">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="particleCons">
+				<div class="row form-horizontal">
+					<div class="col-lg-12"><br/>
+						<div class="form-group">
+							<label class="col-lg-2 control-label  text-right">Name:</label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control" name="name" value=""/>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12"><br/>
+						<fieldset class="col-lg-6">
+						  <div class="col-lg-12 well">
+							<legend>Velocities</legend>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Vx:</label>
+								<div class="col-lg-2 inputH checkbox">
+									<input type="checkbox" name="vxTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="vx" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Vy:</label>
+								<div class="col-lg-2 inputH checkbox">
+									<input type="checkbox" name="vyTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="vy" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Vphi:</label>
+								<div class="col-lg-2 inputH checkbox">
+									<input type="checkbox" name="vphiTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="vphi" class="form-control"/>
+								</div>
+							</div>
+						  </div>
+						</fieldset>
+						<fieldset class="col-lg-6">
+						  <div class="col-lg-12 well">
+							<legend>Forces</legend>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Fx:</label>
+								<div class="col-lg-2 inputH">
+									<input type="checkbox" name="fxTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="fx" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Fy:</label>
+								<div class="col-lg-2 inputH">
+									<input type="checkbox" name="fyTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="fy" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Fphi:</label>
+								<div class="col-lg-2 inputH">
+									<input type="checkbox" name="fphiTag" value="1"></input>
+								</div>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="fphi" class="form-control"/>
+								</div>
+							</div>
+						  </div>
+						</fieldset>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="particleConsAddBtn">Save</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="spasCons">
+				<form class="form-horizontal">
+				  <div class="col-lg-12 well">
+					<div class="form-group">
+						<label class="col-lg-4 control-label">At Top All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<select name="topAllBCType" class="form-control"/>
+								<!--option value="TOTAL_HEAD" selected>Total Head</option>
+								<option value="DARCY_VELOCITY">Darcy Velocity</option-->
+							</select>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="topAll" class="form-control" placeholder="Boundary Condition Value"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">At Bottom All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<select name="bottomAllBCType" class="form-control"/>
+								<!--option value="TOTAL_HEAD" selected>Total Head</option>
+								<option value="DARCY_VELOCITY">Darcy Velocity</option-->
+							</select>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="bottomAll" class="form-control" placeholder="Boundary Condition Value"/>
+						</div>
+					</div>
+					<!--div class="form-group">
+						<label class="col-lg-4 control-label">At Top All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<select name="topAllBCType2" class="form-control"/>
+								<option value="CONCENTRATION" selected>Concentration</option>
+								<option value="MASS_FLUX">Mass Flux</option>
+							</select>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="topAll2" class="form-control" placeholder="Boundary Condition Value"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">At Bottom All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<select name="bottomAllBCType2" class="form-control"/>
+								<option value="CONCENTRATION" selected>Concentration</option>
+								<option value="MASS_FLUX">Mass Flux</option>
+							</select>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="bottomAll2" class="form-control" placeholder="Boundary Condition Value"/>
+						</div>
+					</div-->
+					<!--div class="form-group">
+						<label class="col-lg-4 control-label">Total Head At Top All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="totalHeadTopAll1" class="form-control"/>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="totalHeadTopAll2" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">Darcy Velocity At Bottom All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="DarcyVelocityBottomAll1" class="form-control"/>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="DarcyVelocityBottomAll2" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">Concentration At Top All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="concentrationTopAll1" class="form-control"/>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="concentrationTopAll2" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">Mass Flux At Bottom All Surface:</label>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="massFluxBottomAll1" class="form-control"/>
+						</div>
+						<div class="col-lg-3 inputH">
+							<input type="number" name="massFluxBottomAll2" class="form-control"/>
+						</div>
+					</div-->
+				  </div>
+				</form>
+				<div class="col-lg-12" id="hotConsSpasBC"></div>
+				<div class="col-lg-12" id="hotConsSpasIC"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="spasConsBtn">Edit</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="nodeConsList">
+				<div class="col-lg-12" id="hotConsNode"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="modalNodeConsListBtn">Edit</button>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="particleConsList">
+				<div class="col-lg-12" id="hotConsParticle"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="particleConsListBtn">Edit</button>
+				</div>
+			</div>
+		</div>
+	  </div>
+	  </div>
+	</div>
+  </div>
+</div>

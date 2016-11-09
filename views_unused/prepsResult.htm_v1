@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>PREPS Result</title>
+        <link rel="stylesheet" href='//quantumfi.com.au/shared/bootstrap/css/bootstrap.css'>
+    </head>
+    <body>
+		<div class="container">
+			<h1 class="text-center">PREPS Result</h1>
+			<div class="row">
+				<div class="col-lg-12"><label>Project : </label><span id="pName">{{@project}}</span></div>
+				<div class="col-lg-12"><label>Simulation : </label><span id="sName">{{@simulation}}</span></div>
+			</div>
+			<div class="row">
+				<output id="list" class="col-lg-12"></output>
+			</div>
+			<!--div class="row">
+				<div class="col-lg-12"><label class="btn btn-lg hide center-block" id="btnPlay" onclick="play()">Play >></label></div>
+			</div-->
+			<div class="row">
+				<div class="col-lg-6"><label class="btn btn-lg hide" id="btnPrev" onclick="prevImg()">< Prev</label></div>
+				<div class="col-lg-6"><label class="btn btn-lg hide navbar-right" id="btnNext" onclick="nextImg()">Next ></label></div>
+			</div>
+		</div>
+		
+        <script src='/views/js/gnuplot_api.js'></script>
+        <script src='/views/js/prepsResult.js'></script>
+    </body>
+</html>

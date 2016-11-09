@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+
+<body ondragstart="return false" onselectstart="return false" oncontextmenu="return false">
+	<script>var QF = function(){}//namespace</script>
+	<script src="js/pixi.js/pixi-v2.js"></script>
+	<script src="js/game/qf.display.js"></script>
+	<script src="js/game/circle.js"></script>
+	
+	<!--script src="js/game/Box2D_v2.2.1_min.js"></script><!--https://github.com/kripken/box2d.js-->
+	<script src="js/game/box2dweb-master/Box2d.min.js"></script><!--https://github.com/hecht-software/box2dweb-->
+	<script src="http://box2dweb.googlecode.com/svn/trunk/Box2d.min.js"></script><!--https://github.com/hecht-software/box2dweb-->
+	
+	
+	<!-- box2djs : http://box2d-js.sourceforge.net/ -->
+	<!--[if IE]><script type="text/javascript" src="js/game/box2d-js_0.1.0/lib/excanvas.js"></script><![endif]-->
+    <!--script src="js/game/box2d-js_0.1.0/lib/prototype-1.6.0.2.js"></script>
+	
+    <script src='js/box2d/common/b2Settings.js'></script>
+    <script src='js/box2d/common/math/b2Vec2.js'></script>
+    <script src='js/box2d/common/math/b2Mat22.js'></script>
+    <script src='js/box2d/common/math/b2Math.js'></script>
+    <script src='js/box2d/collision/b2AABB.js'></script>
+    <script src='js/box2d/collision/b2Bound.js'></script>
+    <script src='js/box2d/collision/b2BoundValues.js'></script>
+    <script src='js/box2d/collision/b2Pair.js'></script>
+    <script src='js/box2d/collision/b2PairCallback.js'></script>
+    <script src='js/box2d/collision/b2BufferedPair.js'></script>
+    <script src='js/box2d/collision/b2PairManager.js'></script>
+    <script src='js/box2d/collision/b2BroadPhase.js'></script>
+    <script src='js/box2d/collision/b2Collision.js'></script>
+    <script src='js/box2d/collision/Features.js'></script>
+    <script src='js/box2d/collision/b2ContactID.js'></script>
+    <script src='js/box2d/collision/b2ContactPoint.js'></script>
+    <script src='js/box2d/collision/b2Distance.js'></script>
+    <script src='js/box2d/collision/b2Manifold.js'></script>
+    <script src='js/box2d/collision/b2OBB.js'></script>
+    <script src='js/box2d/collision/b2Proxy.js'></script>
+    <script src='js/box2d/collision/ClipVertex.js'></script>
+    <script src='js/box2d/collision/shapes/b2Shape.js'></script>
+    <script src='js/box2d/collision/shapes/b2ShapeDef.js'></script>
+    <script src='js/box2d/collision/shapes/b2BoxDef.js'></script>
+    <script src='js/box2d/collision/shapes/b2CircleDef.js'></script>
+    <script src='js/box2d/collision/shapes/b2CircleShape.js'></script>
+    <script src='js/box2d/collision/shapes/b2MassData.js'></script>
+    <script src='js/box2d/collision/shapes/b2PolyDef.js'></script>
+    <script src='js/box2d/collision/shapes/b2PolyShape.js'></script>
+    <script src='js/box2d/dynamics/b2Body.js'></script>
+    <script src='js/box2d/dynamics/b2BodyDef.js'></script>
+    <script src='js/box2d/dynamics/b2CollisionFilter.js'></script>
+    <script src='js/box2d/dynamics/b2Island.js'></script>
+    <script src='js/box2d/dynamics/b2TimeStep.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2ContactNode.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2Contact.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2ContactConstraint.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2ContactConstraintPoint.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2ContactRegister.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2ContactSolver.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2CircleContact.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2Conservative.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2NullContact.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2PolyAndCircleContact.js'></script>
+    <script src='js/box2d/dynamics/contacts/b2PolyContact.js'></script>
+    <script src='js/box2d/dynamics/b2ContactManager.js'></script>
+    <script src='js/box2d/dynamics/b2World.js'></script>
+    <script src='js/box2d/dynamics/b2WorldListener.js'></script>
+    <script src='js/box2d/dynamics/joints/b2JointNode.js'></script>
+    <script src='js/box2d/dynamics/joints/b2Joint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2JointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2DistanceJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2DistanceJointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2Jacobian.js'></script>
+    <script src='js/box2d/dynamics/joints/b2GearJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2GearJointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2MouseJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2MouseJointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2PrismaticJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2PrismaticJointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2PulleyJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2PulleyJointDef.js'></script>
+    <script src='js/box2d/dynamics/joints/b2RevoluteJoint.js'></script>
+    <script src='js/box2d/dynamics/joints/b2RevoluteJointDef.js'></script-->
+	<script>
+	//$(function() {
+		var windowPadding = {
+			height: 8,
+			width: 8
+		}
+		var canv = {
+			height:window.innerHeight+1-windowPadding.height,//500:0->499; 501:0->500; height:move distant (height>moving distant)
+			width: window.innerWidth+1-windowPadding.width
+		};
+		
+		//BOX2D
+		var world;
+		
+		//PIXI
+		var renderer;
+		var stage = new PIXI.Stage(0xffffff, true);
+		var wallThickness = 50, wallColor = "0xff0000";;
+		var bodies = [], actors = [];
+
+		function initRenderer(){
+			// You can use either PIXI.WebGLRenderer or PIXI.CanvasRenderer
+			renderer = new PIXI.CanvasRenderer(canv.width, canv.height);
+
+			document.body.appendChild(renderer.view);	
+			console.log(stage);
+			stage.alpha = 0.3;
+			stage.worldAlpha = 0.3;
+			//setup debug draw
+			var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
+			var debugDraw = new b2DebugDraw();
+			debugDraw.SetSprite(document.getElementsByTagName("canvas")[0].getContext("2d"));
+			debugDraw.SetDrawScale(3.0);
+			debugDraw.SetFillAlpha(0.9);
+			debugDraw.SetLineThickness(10.0);
+			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+			world.SetDebugDraw(debugDraw);
+		}
+		
+		function animate() {
+			requestAnimationFrame(animate);
+			
+			//BOX2D
+			world.Step(1/60, 3, 3);//timeStep, velocityIterations, positionIterations
+			world.DrawDebugData();
+			world.ClearForces();
+			const n = actors.length;
+			for (var i = 0; i < n; i++)
+			{
+				var body  = bodies[i];
+				var actor = actors[i];
+				var position = body.GetPosition();
+				actor.position.x = position.x ;
+				actor.position.y = position.y ;
+				actor.pivot = new PIXI.Point(body.width/2 ,body.height/2);
+				//actor.rotation = body.GetAngle();
+			}
+			//console.log(actor.position);
+			//PIXI
+			renderer.render(stage);
+		}
+		
+		function pixiWall(PIXIGraphics, postX, postY, lenX, lenY){
+			PIXIGraphics.beginFill(wallColor);
+			PIXIGraphics.drawRect(postX/10, postY/10, lenX/10, lenY/10);
+			stage.addChild(PIXIGraphics);
+		}
+		
+		function box2dWall(polyFixture, bodyDef, postX, postY, lenX, lenY){
+			polyFixture.shape.SetAsBox(lenX/2, lenY/2);
+			bodyDef.position.Set(postX, postY);
+			world.CreateBody(bodyDef).CreateFixture(polyFixture);
+			console.log(lenX);
+			console.log(lenY);
+			console.log(polyFixture.shape.m_vertices);
+		}
+		
+		function iniWall(){
+			//PIXI
+			var PIXIGraphics = new PIXI.Graphics();
+			pixiWall(PIXIGraphics, canv.width, 0, -wallThickness, canv.height);//right
+			pixiWall(PIXIGraphics, 0, 0, wallThickness, canv.height);//left
+			pixiWall(PIXIGraphics, 0, 0, canv.width, wallThickness );//top
+			pixiWall(PIXIGraphics, 0, canv.height, canv.width, -wallThickness);//bottom
+			
+			//Box2D
+			const polyFixture = new Box2D.Dynamics.b2FixtureDef();
+			polyFixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
+			polyFixture.density = 1;
+			polyFixture.friction = 0.5;
+			polyFixture.restitution = 0.2;
+			
+			const bodyDefStatic = new Box2D.Dynamics.b2BodyDef();
+			bodyDefStatic.type = Box2D.Dynamics.b2Body.b2_staticBody;
+			
+			
+			polyFixture.shape.SetAsBox(canv.width, wallThickness);
+			bodyDefStatic.position.Set(0,  canv.height - wallThickness * 5);
+			world.CreateBody(bodyDefStatic).CreateFixture(polyFixture);
+			
+			//box2dWall(polyFixture, bodyDefStatic, canv.width - wallThickness, canv.height/2, wallThickness, canv.height);//right
+			//box2dWall(polyFixture, bodyDefStatic, 0 + wallThickness, canv.height/2, wallThickness, canv.height);//left
+			box2dWall(polyFixture, bodyDefStatic, canv.width/2, 0 + wallThickness, canv.width, wallThickness );//top
+			//box2dWall(polyFixture, bodyDefStatic, canv.width/2, canv.height - wallThickness, canv.width, wallThickness);//bottom
+			
+		}
+		
+		function iniItem(){
+			var itemPadding = 4;
+			var radius = 40;
+			var distant = radius * 2 + itemPadding;
+			var totalItem = 10;
+			var positionX = wallThickness + radius + itemPadding;
+			var positionY = wallThickness + radius + itemPadding;
+			
+			
+			//var gamespaceWidth = canv.width - wallThickness * 2;
+			//var gamespaceHeight = canv.height - wallThickness * 2;
+			
+			var gamespaceWidth = 222;
+			var gamespaceHeight = 222;
+			
+			//BOX2D - start
+			//const bodyDefDynamic = new Box2D.Dynamics.b2BodyDef();
+			//bodyDefDynamic.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+		
+			const circleFixture	= new Box2D.Dynamics.b2FixtureDef();
+			circleFixture.shape	= new Box2D.Collision.Shapes.b2CircleShape();
+			circleFixture.density = 1;
+			circleFixture.restitution = 1.7;
+			//BOX2D - end
+			
+			for(var x = positionX; x < gamespaceWidth; x+=distant){
+				for(var y = gamespaceHeight; y > positionY; y-=distant){
+					//PIXI
+					//var circle = new Circle();
+					var circle = new PIXI.Graphics()
+					circle.beginFill("0x000");
+					circle.drawCircle(x, y, radius);
+					circle.pivot.x = circle.pivot.y = 0.5;
+					stage.addChild(circle);
+					actors[actors.length] = circle;
+					
+					//Box2D
+					const bodyDefDynamic = new Box2D.Dynamics.b2BodyDef();
+					bodyDefDynamic.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+					
+					bodyDefDynamic.position.Set(x/100, y/100);
+					var body = world.CreateBody(bodyDefDynamic);
+					circleFixture.shape.SetRadius(radius/100);
+					body.CreateFixture(circleFixture);
+					bodies.push(body);
+				}
+			}
+		}
+		
+		function initPhysicEngine(){
+			world = new Box2D.Dynamics.b2World(
+				new Box2D.Common.Math.b2Vec2(0, 10),  
+				true
+			);
+		}
+		
+		
+		initPhysicEngine();
+		initRenderer();
+		iniWall();
+		iniItem();
+		animate();
+	//});
+	</script>
+</body>
+</html>

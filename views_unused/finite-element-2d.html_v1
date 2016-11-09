@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Finite Element Simulation</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	
+	<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.css" media="screen">
+	<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="//bootswatch.com/flatly/bootstrap.min.css">
+	<link rel="stylesheet" href="//handsontable.com/dist/handsontable.full.css" media="screen">
+	<link rel="stylesheet" href="js/FM/main.css">
+</head>
+<body>
+	<div id="container"></div>
+	<div id="mousePos">X: <span id="mpX"></span>;  Y: <span id="mpY"></span></div>
+	<div id="solveResult" title="Solve Result" class="showNone"><div></div></div>
+	
+	<script src="//quantumfi.com.au/shared/jquery.js"></script>
+	<script src="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="//quantumfi.com.au/shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="//quantumfi.com.au/shared/lodash.min.js"></script>
+	<script src="//handsontable.com/dist/handsontable.full.min.js"></script><!--script src="//quantumfi.com.au/shared/handsontable.full.min.js"></script-->
+	<script src="dat.gui.js"></script>
+	<script src="stats.min.js"></script>
+	<script src="js/pixi.js/pixi-v2.js"></script>
+	
+	<script src="js/FM/qf.js"></script>
+	<script src="js/qf.util.js"></script>
+	<script src="js/qf.display.js"></script>
+	<script src="js/circle.js"></script>
+	<script src="js/polygon.js"></script>
+	<script src="js/FM/qf.setting.js"></script>
+	<script src="js/FM/qf.LogicSelect.js"></script>
+	<script src="js/FM/qf.Logic.js"></script>
+	<script src="js/FM/qf.mode.js"></script>
+	<script src="js/FM/qf.element.js"></script>
+	<script src="js/FM/qf.node.js"></script>
+	<script src="js/FM/qf.keyEvent.js"></script>
+	<script src="js/FM/qf.guiClick.js"></script>
+	<script src="js/FM/qf.guiCrtl.js"></script>
+	<script src="js/FM/main.js"></script>
+	
+	<div class="modal fade" id="modalBeam2" tabindex="-1" role="dialog" aria-labelledby="modalBeam2Label">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalBeam2Label">Element Type: Beam2</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 1</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node1" placeholder="Node 1">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 2</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node2" placeholder="Node 2">
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalBeam2Btn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalTri3" tabindex="-1" role="dialog" aria-labelledby="modalTri3Label">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalTri3Label">Element Type: Tri3</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 1</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node1" placeholder="Node 1">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 2</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node2" placeholder="Node 2">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 3</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node3" placeholder="Node 3">
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalTri3Btn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalQuad4" tabindex="-1" role="dialog" aria-labelledby="modalQuad4Label">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalQuad4Label">Element Type: Quad4</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 1</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node1" placeholder="Node 1">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 2</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node2" placeholder="Node 2">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node 3</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node3" placeholder="Node 3">
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-2 control-label">Node4</label>
+			  <div class="col-lg-10">
+				<input type="number" class="form-control" name="node4" placeholder="Node 4">
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalQuad4Btn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	
+	<div class="modal fade" id="modalElemAttr" tabindex="-1" role="dialog" aria-labelledby="modalElemAttrLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalElemAttrLabel">Element Properties</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<input type="hidden" name="type"/>
+			<fieldset>
+				<legend>Material properties</legend>
+				<div class="form-group">
+				  <label class="col-lg-4 control-label">Young's modulus:</label>
+				  <div class="col-lg-8">
+					<input type="text" class="form-control" name="youngModulus"/>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-lg-4 control-label">Poisson's ratio:</label>
+				  <div class="col-lg-8">
+					<input type="text" class="form-control" name="poissonRatio"/>
+				  </div>
+				</div>
+			</fieldset>
+			
+			<fieldset id="fieldsetGeo" class="hide">
+				<legend>Geometrical properties</legend>
+				<div class="form-group fgArea hide">
+				  <label class="col-lg-4 control-label">Area:</label>
+				  <div class="col-lg-8">
+					<input type="text" class="form-control" name="area"/>
+				  </div>
+				</div>
+				<div class="form-group fgMoment hide">
+				  <label class="col-lg-4 control-label">Moment of inertia (I):</label>
+				  <div class="col-lg-8">
+					<input type="text" class="form-control" name="moment"/>
+				  </div>
+				</div>
+				<div class="form-group fgThickness hide">
+				  <label class="col-lg-4 control-label">Thickness:</label>
+				  <div class="col-lg-8">
+					<input type="text" class="form-control" name="thickness"/>
+				  </div>
+				</div>
+			</fieldset>
+			
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalElemAttrBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalNodesAttr" tabindex="-1" role="dialog" aria-labelledby="modalNodesAttrLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalNodesAttrLabel">Nodes Properties</h4>
+		  </div>
+		  <div class="modal-body">
+			  <form class="form-horizontal">
+			  <fieldset>
+				<legend>Restraint</legend>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">x:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="restraintX" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">y:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="restraintY" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">z (rotation):</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="restraintZrotation" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Temparature, Celcius:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="temparature" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Load P, Newtons:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="loadP" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Load Q, Newtons:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="loadQ" class="form-control"/>
+					</div>
+				</div>
+			  </fieldset>
+			  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalNodesAttrBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalEditor" tabindex="-1" role="dialog" aria-labelledby="modalEditorLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalEditorLabel">FEM Editor</h4>
+		  </div>
+		  <div class="modal-body">
+		  <ul class="nav nav-tabs">
+			  <li class="active"><a href="#nodeEditor" data-toggle="tab">Nodes</a></li>
+			  <li><a href="#elemEditor2" data-toggle="tab">Elements Beam</a></li>
+			  <li><a href="#elemEditor3" data-toggle="tab">Elements Tri</a></li>
+			  <li><a href="#elemEditor4" data-toggle="tab">Elements Quad</a></li>
+		  </ul>
+		  <div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade active in" id="nodeEditor">
+				<div id="exN"></div>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor2">
+				<div id="exE2"></div>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor3">
+				<div id="exE3"></div>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor4">
+				<div id="exE4"></div>
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalEditorBtn">Save changes</button>
+		  </div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="modalSubdivide" tabindex="-1" role="dialog" aria-labelledby="modalSubdivideLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalSubdivideLabel">Subdivide</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-lg-4 control-label">Total Section at X:</label>
+				<div class="col-lg-8 inputH">
+					<input type="number" name="subDivideX" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-4 control-label">Total Section at Y:</label>
+				<div class="col-lg-8 inputH">
+					<input type="number" name="subDivideY" class="form-control"/>
+				</div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubdivideBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalExtrude" tabindex="-1" role="dialog" aria-labelledby="modalExtrudeLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalExtrudeLabel">Extrude</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-lg-4 control-label">X:</label>
+				<div class="col-lg-8 inputH">
+					<input type="number" name="extrudeX" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-4 control-label">Y:</label>
+				<div class="col-lg-8 inputH">
+					<input type="number" name="extrudeY" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-4 control-label">Old element:</label>
+				<div class="col-lg-8 inputH checkbox">
+					<label>
+					 <input type="checkbox" name="extrudeLeave"/> leave
+					</label>
+				</div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalExtrudeBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<!--div class="modal fade" id="modalEditor" tabindex="-1" role="dialog" aria-labelledby="modalEditorLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalEditorLabel">FEM Editor</h4>
+		  </div>
+		  <div class="modal-body">
+		  <ul class="nav nav-tabs">
+			  <li class="active"><a href="#nodeEditor" data-toggle="tab">Nodes</a></li>
+			  <li><a href="#elemEditor2" data-toggle="tab">Elements Beam</a></li>
+			  <li><a href="#elemEditor3" data-toggle="tab">Elements Tri</a></li>
+			  <li><a href="#elemEditor4" data-toggle="tab">Elements Quad</a></li>
+		  </ul>
+		  <div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade active in" id="nodeEditor">
+			  <form class="form-horizontal">
+				<table class="table table-striped table-hover" id="nodeTbl">
+				  <thead>
+					<tr>
+					  <th>Index</th>
+					  <th>X</th>
+					  <th>Y</th>
+					  <th>Z</th>
+					</tr>
+				  </thead>
+				  <tbody></tbody>
+				</table>
+			  </form>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor2">
+			  <form class="form-horizontal">
+				<table class="table table-striped table-hover" id="elem2Tbl">
+				  <thead>
+					<tr>
+					  <th>#</th>
+					  <th>Index</th>
+					  <th>Type</th>
+					  <th>Property</th>
+					  <th>Node 1</th>
+					  <th>Node 2</th>
+					</tr>
+				  </thead>
+				  <tbody></tbody>
+				</table>
+			  </form>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor3">
+			  <form class="form-horizontal">
+				<table class="table table-striped table-hover" id="elem3Tbl">
+				  <thead>
+					<tr>
+					  <th>#</th>
+					  <th>Index</th>
+					  <th>Type</th>
+					  <th>Property</th>
+					  <th>Node 1</th>
+					  <th>Node 2</th>
+					  <th>Node 3</th>
+					</tr>
+				  </thead>
+				  <tbody></tbody>
+				</table>
+			  </form>
+			</div>
+			<div class="tab-pane fade in" id="elemEditor4">
+			  <form class="form-horizontal">
+				<table class="table table-striped table-hover" id="elem4Tbl">
+				  <thead>
+					<tr>
+					  <th>#</th>
+					  <th>Index</th>
+					  <th>Type</th>
+					  <th>Property</th>
+					  <th>Node 1</th>
+					  <th>Node 2</th>
+					  <th>Node 3</th>
+					  <th>Node 4</th>
+					</tr>
+				  </thead>
+				  <tbody></tbody>
+				</table>
+			  </form>
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalEditorBtn">Save changes</button>
+		  </div>
+		  </div>
+		</div>
+	  </div>
+	</div-->
+
+	<!--div class="modal fade" id="modalConstraint" tabindex="-1" role="dialog" aria-labelledby="modalConstraintLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalConstraintLabel">Constraint (ref: www.strand7.com/html/links.htm)</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Type:</label>
+			  <div class="col-lg-8">
+			  <select class="form-control" name="constraintType">
+				<option value="master-slave">master/slave</option>
+				<option value="sectorSymmetry">Sector Symmetry</option>
+				<option value="coupling">Coupling</option>
+				<option value="pinned">Pinned</option>
+				<option value="rigid">Rigid</option>
+				<option value="shrink">Shrink</option>
+				<option value="2Point">2-Point</option>
+				<option value="attachment">Attachment</option>
+				<option value="multiPoint">Multi-point</option>
+			  </select>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Selected Nodes:</label>
+			  <div class="col-lg-8">
+				<ul class="list-group">
+				  <li class="list-group-item">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					N1
+				  </li>
+				  <li class="list-group-item">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					N2
+				  </li>
+				</ul>
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalConstraintBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalRestraint" tabindex="-1" role="dialog" aria-labelledby="modalRestraintLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalRestraintLabel">Restraint</h4>
+		  </div>
+		  <div class="modal-body">
+			  <form class="form-horizontal">
+			  <fieldset>
+				<legend>Translational, mm</legend>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">x:</label>
+					<div class="col-lg-5 inputH">
+						<select name="vxTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+					</div>
+					<div class="col-lg-5 inputH">
+						<input type="number" name="vx" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">y:</label>
+					<div class="col-lg-5 inputH">
+						<select name="vyTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+					</div>
+					<div class="col-lg-5 inputH">
+						<input type="number" name="vy" class="form-control"/>
+					</div>
+				</div>
+				<!--div class="form-group">
+					<label class="col-lg-2 control-label">z:</label>
+					<div class="col-lg-5 inputH">
+						<select name="vphiTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+					</div>
+					<div class="col-lg-5 inputH">
+						<input type="number" name="vphi" class="form-control"/>
+					</div>
+				</div-->
+			  <!--/fieldset><br/>
+			  <fieldset>
+				<legend>Rotation, deg</legend>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">x:</label>
+					<div class="col-lg-5 inputH">
+						<select name="vxTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+					</div>
+					<div class="col-lg-5 inputH">
+						<input type="number" name="vx" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">y:</label>
+					<div class="col-lg-5 inputH">
+						<select name="vyTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+					</div>
+					<div class="col-lg-5 inputH">
+						<input type="number" name="vy" class="form-control"/>
+					</div>
+				</div>
+			  </fieldset>
+			  <br/>
+			  <fieldset>
+				<legend>Nodes List</legend>
+				<div class="form-group">
+				  <label class="col-lg-2 control-label">Selected Nodes:</label>
+				  <div class="col-lg-10">
+					<ul class="list-group">
+					  <li class="list-group-item">
+						<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						N1
+					  </li>
+					  <li class="list-group-item">
+						<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						N2
+					  </li>
+					</ul>
+				  </div>
+				</div>
+			  </fieldset>
+			  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalRestraintBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalTemparature" tabindex="-1" role="dialog" aria-labelledby="modalTemparatureLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalTemparatureLabel">Temparature</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Value:</label>
+			  <div class="col-lg-8">
+				<input type="text" class="form-control" name="temperature"/>
+			  </div>
+			</div>
+			
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Selected Nodes:</label>
+			  <div class="col-lg-8">
+				<ul class="list-group">
+				  <li class="list-group-item">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					N1
+				  </li>
+				  <li class="list-group-item">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					N2
+				  </li>
+				</ul>
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalTemparatureBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalLoad" tabindex="-1" role="dialog" aria-labelledby="modalLoadLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalLoadLabel">Load</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			...
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalLoadBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalMaterial" tabindex="-1" role="dialog" aria-labelledby="modalMaterialLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalMaterialLabel">Material</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Name:</label>
+			  <div class="col-lg-8">
+				<input type="text" class="form-control" name="name"/>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Young's modulus:</label>
+			  <div class="col-lg-8">
+				<input type="text" class="form-control" name="YoungModulus"/>
+			  </div>
+			</div>
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Poisson's ratio:</label>
+			  <div class="col-lg-8">
+				<input type="text" class="form-control" name="PoissonRatio"/>
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalMaterialBtn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalRunSolver" tabindex="-1" role="dialog" aria-labelledby="modalRunSolverLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalRunSolverLabel">Solver Output</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			...
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalSelectProj" tabindex="-1" role="dialog" aria-labelledby="modalSelectProjLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalSelectProjLabel">Open Project</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			...
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSelectProjBtn">Open</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalSaveData" tabindex="-1" role="dialog" aria-labelledby="modalSaveDataLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalSaveDataLabel">Save Project</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			  <label class="col-lg-4 control-label">Project Name</label>
+			  <div class="col-lg-8">
+				<input type="text" class="form-control" name="projName" placeholder="Project Name">
+			  </div>
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSaveDataBtn">Save</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+		
+	<div class="modal fade" id="modalProfile" tabindex="-1" role="dialog" aria-labelledby="modalProfileLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="modalProfileLabel">Profile</h4>
+		  </div>
+		  <div class="modal-body">
+		  <form class="form-horizontal">
+			<div class="form-group">
+			...
+			</div>
+		  </form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalProfileBtn">Save</button>
+		  </div>
+		</div>
+	  </div>
+	</div-->
+		
+</body>
+</html>

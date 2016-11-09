@@ -1,0 +1,144 @@
+<div class="modal fade" id="modalEditor" tabindex="-1" role="dialog" aria-labelledby="modalEditorLabel">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="modalEditorLabel">Editor</h4>
+	  </div>
+	  <div class="modal-body">
+	  <ul class="nav nav-tabs">
+		  <li class="active"><a href="#spasEditor" data-toggle="tab">SPAS</a></li>
+		  <li><a href="#nodeEditor" data-toggle="tab">Nodes</a></li>
+		  <li><a href="#elemEditor" data-toggle="tab">Elements</a></li>
+		  <li><a href="#spolyEditor" data-toggle="tab">SPOLY</a></li>
+		  <!--li><a href="#elemEditor3" data-toggle="tab">Elements Tri</a></li>
+		  <li><a href="#elemEditor4" data-toggle="tab">Elements Quad</a></li-->
+	  </ul>
+	  <div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade active in" id="spasEditor">
+			<form class="form-horizontal" id="spasEditorForm">
+				<div class="well ">
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Layer Dimension</label>
+					  <div class="col-lg-6">
+						<input type="number" class="form-control" name="layerDimension" placeholder="Layer Dimension" value="100">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Horizontal Subdivision</label>
+					  <div class="col-lg-6">
+						<input type="number" class="form-control" name="horizontalSubdivision" placeholder="Horizontal Subdivision" value="10">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Horizontal Ratio</label>
+					  <div class="col-lg-6">
+						<input type="number" class="form-control" name="horizontalRatio" placeholder="Horizontal Ratio" value="1">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Subdivision</label>
+					  <div class="col-lg-6 checkbox">
+						<label><input type="checkbox" name="allLayersSubdivision" value="true">Apply Same Vertical Subdivision to All Layers</label>
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Vertical Subdivision</label>
+					  <div class="col-lg-6">
+						<input type="number" class="form-control" name="verticalSubdivision" placeholder="Vertical Subdivision" value="" disabled="">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Ratio</label>
+					  <div class="col-lg-6 checkbox">
+						<label><input type="checkbox" name="allLayersRatio" value="true">Apply Same Vertical Ratio to All Layers</label>
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Vertical Ratio</label>
+					  <div class="col-lg-6">
+						<input type="number" class="form-control" name="verticalRatio" placeholder="Vertical Ratio" value="" disabled="">
+					  </div>
+					</div>
+				</div>
+				<!--/fieldset-->
+			</form>
+			<div id="spasE"></div>
+		</div>
+		<div class="tab-pane fade in" id="nodeEditor">
+			<form class="form-horizontal" id="feConstraintNameSearchForm">
+				<div class="form-group">
+				  <label class="col-lg-4 control-label">Constraint Name</label>
+				  <div class="col-lg-6">
+					<input type="text" class="form-control" name="constraintName" placeholder="Constraint Name">
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-lg-4 control-label"></label>
+				  <div class="col-lg-6">
+					<div class="well" id="feConstraintNameSearchResult"></div>
+				  </div>
+				</div>
+			</form>
+			<div id="exN"></div>
+		</div>
+		<div class="tab-pane fade in" id="elemEditor">
+			<form class="form-horizontal" id="fePropertyNameSearchForm">
+				<div class="form-group">
+				  <label class="col-lg-4 control-label">Property Name</label>
+				  <div class="col-lg-6">
+					<input type="text" class="form-control" name="propertyName" placeholder="Property Name">
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-lg-4 control-label"></label>
+				  <div class="col-lg-6">
+					<div class="well" id="fePropertyNameSearchResult"></div>
+				  </div>
+				</div>
+			</form>
+			<div id="exE"></div>
+		</div>
+		<div class="tab-pane fade in" id="spolyEditor">
+			<div class="row">
+				<form class="form-horizontal col-lg-6" id="spolyPropertyNameSearchForm">
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Property Name</label>
+					  <div class="col-lg-8">
+						<input type="text" class="form-control" name="propertyName" placeholder="Property Name">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label"></label>
+					  <div class="col-lg-8">
+						<div class="well" id="spolyPropertyNameSearchResult"></div>
+					  </div>
+					</div>
+				</form>
+				
+				<form class="form-horizontal col-lg-6" id="spolyConstraintNameSearchForm">
+					<div class="form-group">
+					  <label class="col-lg-4 control-label">Constraint Name</label>
+					  <div class="col-lg-8">
+						<input type="text" class="form-control" name="constraintName" placeholder="Constraint Name">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <label class="col-lg-4 control-label"></label>
+					  <div class="col-lg-8">
+						<div class="well" id="spolyConstraintNameSearchResult"></div>
+					  </div>
+					</div>
+				</form>
+			</div>
+			<div id="spolyE"></div>
+		</div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalEditorBtn">Save changes</button>
+	  </div>
+	  </div>
+	</div>
+  </div>
+</div>

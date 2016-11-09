@@ -1,0 +1,310 @@
+<CHECK if="{{@invalidUrl}}">
+	<script>
+		//Redirect if direct access to this page
+		//window.location.replace('/');
+	</script>
+</CHECK>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.min.css">
+<link rel="stylesheet" href="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.structure.min.css">
+<link rel="stylesheet" href="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.theme.cupertino.min.css">
+
+<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.css" media="screen">
+<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.min.css" media="screen">
+
+<CHECK if="{{isset(@UI)}}">
+	<true>
+		<include href="include_css.htm"/>
+	</true>
+	<false>
+		<link rel="stylesheet" href="css/bootswatch.min.css">
+		<link rel="stylesheet" href="css/main.css">
+	</false>
+</CHECK>
+</head>
+
+<body ondragstart="return false" onselectstart="return false" oncontextmenu="return false">
+	<div id="mousePos">X: <span id="mpX"></span>;  Y: <span id="mpY"></span></div>
+	<div id="supportMax">
+	
+		<div class="col-lg-3">
+			<h1 id="pName"></h1>
+		<!--button id="buttonImg" class="btn btn-lg" style="bottom:0; position:absolute;">Generate</button-->
+		</div>
+		<div class="col-lg-2">
+			<!--p>Support up to 20k vertices at 1 FPS IF 3 vertices/particle.<br/>
+			Support up to 6k vertices at 5 FPS IF 10 vertices/particle.</p-->
+			Radius: <input type="number" value="15" id="globalRad" placeholder="Radius setting" class="form-control"/>
+		</div>
+		<div class="col-lg-4">
+			Todo : 
+			<select class="form-control">
+				<option>1. show activated mode</option>
+				<option>2. sphero-radius ui</option>
+				<option>3. overlap checking (when copy by increment)</option>
+				<option>4. select multiple particles</option>
+			</select>
+		</div>
+	</div>
+	
+	<div id="solveResult" title="Solve Result" class="showNone">
+		<div></div>
+	</div>
+	<div id="dialogGridSize" title="Configure Grid Size" class="showNone row">
+		<form class="form-horizontal col-lg-12">
+			<fieldset>
+				<legend>Grid Size</legend>
+				<div class="form-group">
+					<label class="col-lg-1 control-label">Size:</label>
+					<div class="col-lg-9">
+						<input type="range" id="gridSize" min="1" max="40" step="1" class="form-control" oninput="gSVal.innerHTML = value" value="1"/>
+					</div>
+					<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1 control-label">
+						<div id="gSVal">1</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div id="dialogGridLen" title="Configure Grid Length" class="showNone row">
+		<form class="form-horizontal col-lg-12">
+			<fieldset>
+				<legend>Grid Length</legend>
+				<div class="form-group">
+					<label class="col-lg-1 control-label">X:</label>
+					<div class="col-lg-9">
+						<input type="range" id="gridLenX" min="10" max="200" step="1" class="form-control" oninput="glXVal.innerHTML = value" value="10"/>
+					</div>
+					<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1 control-label">
+						<div id="glXVal">10</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-1 control-label">Y:</label>
+					<div class="col-lg-9">
+						<input type="range" id="gridLenY" min="10" max="200" step="1" class="form-control" oninput="glYVal.innerHTML = value" value="10"/>
+					</div>
+					<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1 control-label">
+						<div id="glYVal">10</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div id="dialogImportParticle" title="Import Particle" class="showNone row">
+		<form class="form-horizontal col-lg-12">
+			<fieldset>
+				<legend>Import Particles</legend>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Paste data:</label>
+					<div class="col-lg-9">
+						<textarea name="particles" class="form-control" rows="10"></textarea>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div id="dialogImage" title="Image" class="showNone">
+		<fieldset>
+			<legend>Select Image</legend>
+			<img src="/img/upload/photo.JPG" title="photo" alt="photo" class="col-lg-3 thumbnail btn" onclick="loadFile2Canvas('img1')" id="img1"/>
+			<img src="/img/upload/photoV.jpg" title="photo" alt="photo" class="col-lg-3 thumbnail btn" onclick="loadFile2Canvas('img2')" id="img2"/>
+		</fieldset>
+	</div>
+	<div id="dialogLoad" title="Load" class="showNone">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend>Load Project</legend>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Select Project:</label>
+					<div class="col-lg-8 inputH">
+						<select name="projectName" class="form-control"></select>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div id="dialogCopy" title="Copy" class="showNone">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend>Configuration</legend>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Total copy:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="particleCopyCount" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Total per row:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="particleCopyRow" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">Distant between particles:</label>
+					<div class="col-lg-8 inputH">
+						<input type="number" name="particleCopyDistant" class="form-control">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div id="dialogParticle" title="Edit" class="showNone">
+		<div id="tabs">
+			<ul>
+				<li><a href="#tabs-1">Coordinates</a></li>
+				<li><a href="#tabs-2">Size & Radius</a></li>
+				<li><a href="#tabs-3">Velocity</a></li>
+				<li><a href="#tabs-4">Force</a></li>
+			</ul>
+			<div id="tabs-1">
+				<table id="editVertTbl" cellpadding="5" class="maxWidth">
+				  <thead>
+				  <tr class="dummy">
+					<td class="index">#</td>
+					<td class="x">X</td> 
+					<td class="y">Y</td>
+				  </tr>
+				  </thead>
+				  <tbody></tbody>
+				</table>
+				<small><br/>Double-click value to edit.</small>
+			</div>
+			<div id="tabs-2">
+				<form class="form-horizontal">
+				<fieldset>
+					<legend>Mark</legend>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">Size:</label>
+						<div class="col-lg-8 inputH">
+						<div class="radio">
+						  <label>
+							<input type="radio" name="mark" id="small" value="1" checked="">
+							Small
+						  </label>
+						  <label>
+							<input type="radio" name="mark" id="big" value="0">
+							Big
+						  </label>
+						</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Radius</legend>
+					<div class="form-group">
+						<label class="col-lg-4 control-label">Radius:</label>
+						<div class="col-lg-8 inputH">
+							<input type="number" name="radius"  value="0" class="form-control"><br/>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+			</div>
+			<div id="tabs-3">
+				<form class="form-horizontal">
+				<fieldset>
+					<legend>Velocity</legend>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Vx:</label>
+						<div class="col-lg-5 inputH">
+							<select name="vxTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="vx" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Vy:</label>
+						<div class="col-lg-5 inputH">
+							<select name="vyTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="vy" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Vphi:</label>
+						<div class="col-lg-5 inputH">
+							<select name="vphiTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="vphi" class="form-control"/>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+			</div>
+			<div id="tabs-4">
+				<form class="form-horizontal">
+				<fieldset>
+					<legend>Force</legend>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Fx:</label>
+						<div class="col-lg-5 inputH">
+							<select name="fxTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="fx" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Fy:</label>
+						<div class="col-lg-5 inputH">
+							<select name="fyTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="fy" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Fphi:</label>
+						<div class="col-lg-5 inputH">
+							<select name="fphiTag" class="form-control"><option value="1">Yes</option><option value="0" selected="selected">No</option></select>
+						</div>
+						<div class="col-lg-5 inputH">
+							<input type="number" name="fphi" class="form-control"/>
+						</div>
+					</div>
+				</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div id="axesCenter">(0, 0)</div>
+	<div id="axesX">X</div>
+	<div id="axesY">Y</div>
+	
+	<script src="//quantumfi.com.au/shared/jquery.js"></script>
+	<script src="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="//quantumfi.com.au/shared/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script>var QF = function(){}//namespace</script>
+<CHECK if="{{isset(@UI)}}">
+	<true>
+		<include href="include_js.htm"/>		
+	</true>
+	<false>
+		<script src="dat.gui.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="js/pixi.js/pixi-v2.js"></script>
+		<script src="js/qf.util.js"></script>
+		<script>
+		$(function() {
+			QFUtil.loadjscssfile("js/qf.setting.js", "js");
+			QFUtil.loadjscssfile("js/qf.display.js", "js");
+			QFUtil.loadjscssfile("js/qf.sprite.js", "js");
+			QFUtil.loadjscssfile("js/qf.Logic.js", "js");
+			QFUtil.loadjscssfile("js/polygon.js", "js");
+			QFUtil.loadjscssfile("js/circle.js", "js");
+			QFUtil.loadjscssfile("js/guiCrtl.js", "js");
+			QFUtil.loadjscssfile("js/main.js", "js");
+		});
+		</script>
+	</false>
+</CHECK>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="http://ilab.quantumfi.net/">
+</head>
+
+<body>
+	<div class="col-lg-12">Project Name: <b id="projName" class="text-muted" data="{{@projNameSlug}}">{{@projName}}</b></div>
+	<div class="col-lg-12">
+		<label id="analysisHolder">Analysis Type: <select name="analysisType"></select></label> &nbsp; &nbsp;
+		<label id="timeHolder">Time: <select name="timeStep"></select></label>
+	</div>
+	<div class="col-lg-12"><div id="plotContour"></div></div>
+	
+	<link rel="stylesheet" href="shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="shared/flatly/bootstrap.min.css">
+	
+	<script src="shared/jquery.js"></script>
+	<script src="shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="shared/lodash.min.js"></script>
+	<script src="shared/handsontable/handsontable.full.min.js"></script>
+	<script src="shared/conrec.js"></script>
+	<script src="shared/chroma.min.js"></script>
+	<script src="shared/d3.min.js"></script>
+	<script src="shared/plotly-latest.min.js"></script>
+	
+	<!--script src="js/stats.min.js"></script-->
+	<script src="js/dat.gui.js"></script>
+	<script src="js/pixi.js/pixi-v4.min.js"></script>
+	<script src="js/all/qf.js"></script>
+	<script src="js/all/qf.util.js"></script>
+	<script src="js/all/dot.js?{{@microtime}}"></script>
+	<script src="js/all/qf.common.js?{{@microtime}}"></script>
+	<script src="js/all/qf.mode.js?{{@microtime}}"></script>
+	<script src="js/all/qf.setting.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicFE.js?{{@microtime}}"></script>
+	<script src="js/all/qf.finiteElement.js?{{@microtime}}"></script>
+	<script src="js/all/qf.node.js?{{@microtime}}"></script>
+	<script src="js/all/qf.element.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/qf.ppSetting.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/qf.ppLogic.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/qf.ppMode.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/qf.ppGuiCrtl.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/qf.ppGuiClick.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/CONFEM/main.js?{{@microtime}}"></script>
+	
+	<include href="confemModalContour.htm"/>
+	<!--include href="confemModalFlux.htm"/>
+	<include href="confemModalGraph.htm"/-->
+
+</body>
+</html>
