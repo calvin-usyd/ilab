@@ -226,11 +226,11 @@ $(document).ready(function(){
 	//operGuiCrtl.add(QF.setting.controls, 'Move').name('<span class="glyphicon menuIcon glyphicon-new-window"></span> Move selected (M)').onChange(function(value){
 		//qfMode.toggleParticleNo();
 	//});
-	operGuiCrtl.add(QF.setting.controls, 'UndoCreation').name('<span class="glyphicon menuIcon glyphicon-arrow-left"></span> Undo object creation (U)');
+	operGuiCrtl.add(QF.setting.controls, 'UndoCreation').name('<span class="glyphicon menuIcon glyphicon-arrow-left"></span> Undo object creation');
 	operGuiCrtl.add(QF.setting.controls, 'image').name('<span class="glyphicon menuIcon glyphicon-picture"></span> Add image');
 	
 	//Operation For Discrete Element
-	operGuiCrtl.add(QF.setting.controls, 'CopyByIncrement').name('<span class="glyphicon menuIcon de">DE</span> Copy (C)');
+	operGuiCrtl.add(QF.setting.controls, 'CopyByIncrement').name('<span class="glyphicon menuIcon de">DE</span> Copy');
 	operGuiCrtl.add(QF.setting.controls, 'ParticleNo').name('<span class="glyphicon menuIcon de">DE</span> Particle No.').listen().onChange(function(value){
 		qfMode.toggleParticleNo();
 		QF.setting.controls['ParticleNo'] = QF.setting.particleNoVisibility;
@@ -263,12 +263,17 @@ $(document).ready(function(){
 	
 	
 	//File Gui
-	fileGuiCrtl.add(QF.setting.files, 'New').name('<span class="glyphicon menuIcon glyphicon-file"></span> New project ( <span class="text-success">p + n</span> )');
-	//fileGuiCrtl.add(files, 'Import').name('<img src="/views/icon/import.jpg" width="20">Import particle');
+	/*fileGuiCrtl.add(QF.setting.files, 'New').name('<span class="glyphicon menuIcon glyphicon-file"></span> New project ( <span class="text-success">p + n</span> )');
 	fileGuiCrtl.add(QF.setting.files, 'Open').name('<span class="glyphicon menuIcon glyphicon-folder-open"></span> Open project ( <span class="text-warning">p + o</span> )');
 	fileGuiCrtl.add(QF.setting.files, 'Save').name('<span class="glyphicon menuIcon glyphicon-floppy-disk"></span> Save project ( <span class="text-info">p + s</span> )');
 	fileGuiCrtl.add(QF.setting.files, 'Process').name('<span class="glyphicon menuIcon glyphicon-cog"></span> Solve ( <span class="text-muted">p + v</span> )');
 	fileGuiCrtl.add(QF.setting.files, 'Output').name('<span class="glyphicon menuIcon glyphicon-check"></span> Result ( <span class="text-danger">p + r</span> )');
+	*/
+	fileGuiCrtl.add(QF.setting.files, 'New').name('<span class="glyphicon menuIcon glyphicon-file"></span> New project');
+	fileGuiCrtl.add(QF.setting.files, 'Open').name('<span class="glyphicon menuIcon glyphicon-folder-open"></span> Open project');
+	fileGuiCrtl.add(QF.setting.files, 'Save').name('<span class="glyphicon menuIcon glyphicon-floppy-disk"></span> Save project');
+	fileGuiCrtl.add(QF.setting.files, 'Process').name('<span class="glyphicon menuIcon glyphicon-cog"></span> Solve');
+	fileGuiCrtl.add(QF.setting.files, 'Output').name('<span class="glyphicon menuIcon glyphicon-check"></span> Result');
 	fileGuiCrtl.add(QF.setting.files, 'Files').name('<span class="glyphicon menuIcon glyphicon-open-file"></span> Download/Upload');
 	
 	elemGuiCrtl.open();

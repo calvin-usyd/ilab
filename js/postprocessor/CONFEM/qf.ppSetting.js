@@ -3,7 +3,6 @@
 QF.ppSetting = {
 	pName : '',
 	pId : '',
-	url : 'http://quantumfi.com.au/diagram-simulation/',
 	serv_ppMesh : url+'getMeshData/',
 	serv_ppPlt : url+'getPltData/',
 	analysisTypes : [],

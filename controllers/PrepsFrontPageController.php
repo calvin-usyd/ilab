@@ -4,7 +4,11 @@
 class PrepsFrontPageController extends PrepsController{
 	
 	function index($f3){
-		$f3->set('inc', 'login.htm');
+		if ($f3->exists('SESSION.user') || $f3->get('SESSION.user') != ''){
+			$f3->reroute('/workspace');
+		}else{
+			$f3->set('inc', 'login.htm');
+		}
 	}
 	
 	private function validateLogin($f3){
