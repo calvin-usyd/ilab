@@ -4,17 +4,25 @@ QF.LogicProject = function(){
 this.getGuiDataBySolverType = function(){
 	var sTy = QF.setting.solverType;
 	var proccessedObjArray=[];
-	
+	//var userY = cm.toUserPointY(QF.setting.canv.height, QF.setting.rulerOffset, QF.setting.unitVal);
+	var mapXY;
 	if (sTy == 'SPOLY'){
 		var valArray=[];
 		var proccessedParticleObjArray=[];
-
+		
 		_.forEach(QF.setting.deObjArray, function(o){
 			if (o instanceof Polygon){
-				valArray = o.graphicsData[0].shape.points;
+				valArray = _.map(o.graphicsData[0].shape.points, function(v, i){
+					if (i % 2 != 0){
+						//return userY(v);
+						return usrP.user(v, v).y;
+					}
+					return usrP.user(v, v).x;
+				});
 			}else if (o instanceof Circle){
 				var val = o.graphicsData[0].shape;
-				valArray = [val.x, val.y];
+				mapXY = usrP.user(val.x, val.y);
+				valArray = [mapXY.x, mapXY.x];
 			}
 			proccessedParticleObjArray.push({m:o.mark, r:o.radius, v:valArray, c:o.constraint, p:o.property});
 		});
@@ -24,10 +32,26 @@ this.getGuiDataBySolverType = function(){
 			sim: QF.setting.simulation,
 			particle: proccessedParticleObjArray
 		}
-
-	}else if (sTy == 'CONFEM'){
-		//QF.setting.nodeObjArray
-		//QF.setting.elementIndexArray
+	}else if (sTy == 'PATRUS' || sTy == 'CONFEM'){
+		if (QF.setting.dataEditorNode.length == 0){
+		  QF.setting.dataEditorNode = _.map(QF.setting.nodeObjArray, function(o){
+			  mapXY = usrP.user(o.x, o.y);
+			  mapXY.constraint == o.oconstraint;
+			  return mapXY;
+			//return {x:o.x, y:userY(o.y), constraint:o.o.constraint};
+		  });
+		}
+		if (QF.setting.dataEditorElem.length == 0){
+		  QF.setting.dataEditorElem=_.map(QF.setting.elementIndexArray, function(o, k){
+			return {index:k, prop:o.prop, node1:o.nodes[0], node2:o.nodes[1]};
+		  });
+		}
+		proccessedObjArray = {
+			nodes: QF.setting.dataEditorNode,
+			members: QF.setting.dataEditorElem
+		}
+	}
+	if (sTy == 'CONFEM'){
 		var 
 		mPropArrData = [],
 		mPropSetArrData = [],
@@ -51,6 +75,8 @@ this.getGuiDataBySolverType = function(){
 		});
 		
 		proccessedObjArray = {
+			nodes: proccessedObjArray.nodes,
+			members: proccessedObjArray.members,
 			geometry:{
 				layers:{
 					DIMENSION_X:QF.setting.spasEditorForm['layerDimension'],
@@ -84,56 +110,52 @@ this.getGuiDataBySolverType = function(){
 	return proccessedObjArray;
 }
 this.successLoadProjData = function(json){
-	//var data = json[0];
+	//FE
+	QF.setting.nodeNoTextArray=[];
+	QF.setting.elementIndexArray=[];
+	QF.setting.elementNoTextArray=[];
+	QF.setting.dataEditorElem=[];
+	QF.setting.arrowTextArray=[];
+	QF.setting.loadTextArray=[];
+	QF.setting.bcTextArray=[];
+	QF.setting.nodeObjArray=[];
+	QF.setting.dataEditorNode=[];
+	QF.setting.dataEditorSpas=[];
+	QF.setting.hotEditorSpas.loadData([]);
+	
+	//DE
+	QF.setting.verticesNoTextArray=[];
+	QF.setting.spheroRadiusArray=[];
+	QF.setting.particleNoTextArray=[];
+	QF.setting.deObjArray=[];
+	
 	var data = (json instanceof Object) ? json : JSON.parse(json);
 	data = data[0];
 	
 	var gui = JSON.parse(data['gui']);
 	var sTy = JSON.parse(data['solverType']);
 	QF.setting.solverVal = JSON.parse(data['solverVal']);
-	//var particle = JSON.parse(data['particle']);
-	//var node = JSON.parse(data['node']);
-	//var element = JSON.parse(data['element']);
-	//var param = JSON.parse(data['param']);
-	//var sim = JSON.parse(data['sim']);
 	var pName = cm.replaceAll(data['pName'], '-', ' ');
+	//var userY = cm.toUserPointY(QF.setting.canv.height, QF.setting.rulerOffset, QF.setting.unitVal);
 	
 	//DESTROY ALL OBJECTS
 	stage.removeChildren();
 	initAxes();
 	initRulerX();
 	initRulerY();
-	drawGrid("0x000000");
+	drawGrid("0xb4bcc2");
+	initSelectArea();
 	initDomainLength();
 	initLeftLim();
 	initRightLim();
 	initBottomLim();
 	initTopLim();
+	initRulerText();
 	
 	QF.setting.solverType = sTy;
-		
 	console.log(sTy);
-	if (sTy == 'SPOLY'){
-		//C: LOAD PARTICLES
-		QF.setting.verticesNoTextArray=[];
-		QF.setting.spheroRadiusArray=[];
-		QF.setting.particleNoTextArray=[];
-		QF.setting.deObjArray=[];
-		_.forEach(gui['particle'], function(o){
-			var vArr = [];
-			for(var x=0, len=o['v'].length; x<len; x+=2){
-				vArr.push({x:o['v'][x], y:o['v'][x+1], r:o['r'], m:o['m'], c:o['c'], p:o['p']});
-			};
-			QF.setting.customVerticesArray = vArr;
-			lg.drawDEByRightClick();
-		});
-
-		//E: LOAD SOLVER
-		/*QF.setting.solverSpoly = {
-			param: solverVal['param'],
-			sim: solverVal['sim']
-		};*/
-	}else if (sTy == 'CONFEM'){
+	if (sTy == 'CONFEM'){
+		//QF.setting.isFESpas=true;
 		var layers = gui['geometry']['layers'];
 		var meshArr = gui['mesh']['meshArr'];
 		var MPLayer = gui['mp']['MPLayer'];
@@ -153,17 +175,16 @@ this.successLoadProjData = function(json){
 		_.forEach(layers['layerArr'], function(o, i){
 			mesh = meshArr[i];
 			mProp = MPLayer[i];
-			//console.log('type='+o.type);
 			QF.setting.dataEditorSpas.push({
-				layer:o.layer, type:(typeof o.type=='undefined')?'REGULAR':o.type, thickness:o.thickness, 
-				//incLeftHeight:o.incLeftHeight, incLeftWidth:o.incLeftWidth, 
-				//incRightHeight:o.incRightHeight, incRightWidth:o.incRightWidth, 
-				//mSubH:mesh.mSubH, 
-				//mRatioH:mesh.mRatioH, 
+				layer:o.layer, 
+				thickness:o.thickness,
+				type:(typeof o.type=='undefined')?'REGULAR':o.type, 
+				prop:mProp.prop,
 				mSubV:mesh.mSubV, 
 				mRatioV:mesh.mRatioV, 
-				eType:mesh.eType, prop:mProp.prop
+				eType:mesh.eType
 			});
+			QF.setting.hotEditorSpas.loadData(QF.setting.dataEditorSpas);
 		});
 		
 		//CONSTRAINT
@@ -172,24 +193,10 @@ this.successLoadProjData = function(json){
 		QF.setting.dataConsSpas = gui['boundary']['boundArr'];
 		QF.setting.spasConsForm = gui['boundary']['boundAll'];
 		
-		//var topAll = QF.setting.spasConsForm['SPECIFIED_TOTAL_HEAD_AT_TOP_ALL_SURFACE'].split(' ');
-		//var bottomAll = QF.setting.spasConsForm['SPECIFIED_DARCY_VELOCITY_AT_BOTTOM_ALL_SURFACE'].split(' ');
-		//var conentration = QF.setting.spasConsForm['SPECIFIED_CONCENTRATION_AT_TOP_ALL_SURFACE'].split(' ');
-		//var massFlux = QF.setting.spasConsForm['SPECIFIED_MASS_FLUX_AT_BOTTOM_ALL_SURFACE'].split(' ');
-		
 		_.forEach(QF.setting.spasConsForm, function(consObj){
 			cm.inValSet(consId,consObj.typeName, consObj.type);
 			cm.inValSet(consId,consObj.name, consObj.val);	
 		});
-		//cm.inValSet(id,'topAllBCType', topAll[0]);
-		//cm.inValSet(id,'topAll', topAll[1]);
-		//cm.inValSet(id,'bottomAllBCType', bottomAll[0]);
-		//cm.inValSet(id,'bottomAll', bottomAll[1]);
-		
-		//cm.inValSet(id,'concentrationTopAll1', conentration[0]);
-		//cm.inValSet(id,'concentrationTopAll2', conentration[1]);
-		//cm.inValSet(id,'massFluxBottomAll1', massFlux[0]);
-		//cm.inValSet(id,'massFluxBottomAll2', massFlux[1]);
 		
 		//SOLVER
 		var analysisArr = QF.setting.solverVal['analysis'].split('');
@@ -206,33 +213,62 @@ this.successLoadProjData = function(json){
 		cm.inValSet(solverId, 'timeStationNumber', time['TIME_STATIONS_NUMBER']);
 		cm.inValSet(solverId, 'timeStep', time['OUTPUT_FREQUENCY_IN_TIME']);
 		
-		//GUI
-		lgEditor.genSpasGui();
-		
-	}else{	
-		//A: LOAD NODES
-		/*QF.setting.nodeNoTextArray=[];
-		QF.setting.nodeObjArray=[]
-		_.forEach(node, function(n){
-			lg.drawNode(n);
+	}
+	var mapXY;
+	if (sTy == 'SPOLY'){
+		//C: LOAD PARTICLES
+		_.forEach(gui['particle'], function(o){
+			var vArr = [];
+			for(var x=0, len=o['v'].length; x<len; x+=2){
+				mapXY = usrP.system(o['v'][x], o['v'][x+1]);
+				//vArr.push({x:o['v'][x], y:userY(o['v'][x+1]), r:o['r'], m:o['m'], c:o['c'], p:o['p']});
+				vArr.push({x:mapXY.x, y:mapXY.y, r:o['r'], m:o['m'], c:o['c'], p:o['p']});
+			};
+			QF.setting.customVerticesArray = vArr;
+			lg.drawDEByRightClick();
+		});
+
+		//E: LOAD SOLVER
+		/*QF.setting.solverSpoly = {
+			param: solverVal['param'],
+			sim: solverVal['sim']
+		};*/
+	}else if (sTy == 'PATRUS' || sTy == 'CONFEM'){
+		var nodes = gui['nodes'];
+		var member = gui['members'];
+		_.forEach(nodes, function(n){
+			mapXY=usrP.system(n.x, n.y);
+			mapXY.constraint=n.constraint;
+			lgFE.drawNode(mapXY);
+			/*lgFE.drawNode({
+				x:n.x,
+				y:userY(n.y),
+				constraint:n.constraint
+			});*/
 		});
 		
-		//B: LOAD ELEMENTS
-		_.forEach(QF.setting.elementNoTextArray, function(o){
-			stage.removeChild(o);
-		});
-		QF.setting.elementIndexArray = [];
-		QF.setting.elementNoTextArray = [];
-		if (node.length > 0){
-			_.forEach(element, function(e){
-				var nodeIndexArr = [];
-				_.forEach(e['nodes'], function(eN){
-					nodeIndexArr.push(eN);
-				});
-				//lg.drawElement(_.tail(nodeIndexArr), e['prop']);//Tail remove the first element (index)
-				lg.drawElement(nodeIndexArr, e['prop']);//Tail remove the first element (index)
+		//REBUILD ELEMENTS
+		_.forEach(member, function(o){
+			var 
+			ind=o.index,
+			prop=o.prop,
+			n1=o.node1,
+			n2=o.node2,
+			n3=o.node3,
+			n4=o.node4,
+			n5=o.node5,
+			arr=[n1, n2, n3, n4, n5],
+			filteredArray
+			;
+			
+			filteredArray = _.filter(arr, function(n) {
+			  return (n != "" && typeof n !== 'undefined');
 			});
-		}*/
+			
+			if (filteredArray.length > 0){
+				lgFE.drawElement(filteredArray, false, prop);
+			}
+		});
 	}
 	
 	//D: LOAD PROJECT TITLE
@@ -245,6 +281,7 @@ this.successLoadProjData = function(json){
 	if (sim)
 		QF.setting.simulation = sim;
 	*/
+	cm.hideProgress();
 }
 this.successLoadFileList = function(data){
 	var filesHolder = $('#filesHolder');

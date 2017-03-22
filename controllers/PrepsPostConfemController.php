@@ -6,11 +6,9 @@ class PrepsPostConfemController extends PrepsController
 			$f3->reroute('/login');
 		}
     }
- 
+	
 	public function fixConfemCode($f3){
-	//public function getPltData($f3){
 		$dataStr = file_get_contents('data/calvin/confem.f');
-		//mb_convert_encoding($dataStr,'UTF-8','UTF-8');
 		
 		if(!mb_check_encoding($dataStr, 'UTF-8')) {
 			$dataStr = utf8_encode($dataStr);
@@ -36,13 +34,13 @@ class PrepsPostConfemController extends PrepsController
 	}
 	
 	public function getPltData($f3){
-		$user = $f3->get('SESSION.user');
+		//$user = $f3->get('SESSION.user');
 		//$user = 'calvin';
 		$projName = $f3->get('PARAMS.projName');
 		
-		$path = 'data/'.$user.'/' . $projName ;
-		
-		$plt = explode('\r\n', json_encode(file_get_contents($path . '/' . $projName . '.plt')));
+		//$path = 'data/'.$user.'/' . $projName ;
+		//$plt = explode('\r\n', json_encode(file_get_contents($path . '/' . $projName . '.plt')));
+		$plt = explode('\r\n', json_encode($this->getOutputContent($f3, $projName . '.plt')));
 		
 		$active = trim($plt[2]);
 		$activeArr = explode('  ', $active);
@@ -168,14 +166,12 @@ class PrepsPostConfemController extends PrepsController
 	7.8E-02 = 7.8 * 10^(-2) = 0.078 
 	7.8E3 = 7.8 * 10^3 = 7800 */
 	public function getMeshData($f3){
-		$user = $f3->get('SESSION.user');
+		//$user = $f3->get('SESSION.user');
 		//$user = 'calvin';
-		
+		//$path = 'data/'.$user.'/' . $projName ;
+		//$mesh = file_get_contents($path . '/' . $projName . '.msh');
 		$projName = $f3->get('PARAMS.projName');
-		
-		$path = 'data/'.$user.'/' . $projName ;
-		
-		$mesh = file_get_contents($path . '/' . $projName . '.msh');
+		$mesh = $this->getOutputContent($f3, $projName . '.msh');
 		
 		$dcnStr = 'DISCONTINUOUS_NODES:';
 		$dcdStr = 'DISCONTINUITY DATA';

@@ -15,6 +15,22 @@ class PrepsAccountController extends PrepsController
 		echo Template::instance()->render('finite-element-2d.html');
 	}
 	
+	public function solver($f3){
+		$solverCtrlArr = array(
+			'solve_spoly'=>(new PrepsSolverSpolyController($f3)),
+			'solve_confem'=>(new PrepsSolverConfemController($f3)),
+			'solve_patrus'=>(new PrepsSolverPatrusController($f3))
+		);
+		$solver = $solverCtrlArr[$f3->get('PARAMS.solverType')];
+		$msg = $solver->solve(
+			$f3->get('useExternalServer'),
+			$f3->get('POST.p'),
+			$f3->get('SESSION.user'),
+			$this->getSsh($f3)
+		);
+		$this->echoJson(array("message", $msg));
+	}
+	
 	public function projectFileUpload($f3){
 		$pName = $f3->get('PARAMS.proj');
 		
@@ -135,15 +151,10 @@ class PrepsAccountController extends PrepsController
 		
 		if ($solver == 'SPOLY'){
 			$f3->set('simulation', $params[1]);
-			$htm = 'postProcessorSPOLY.htm';
-			
-		}else if ($solver == 'CONFEM'){
-			$f3->set('projName', str_replace( '-', ' ', $f3->get('PARAMS.projName')));
-			$f3->set('projNameSlug', $f3->get('PARAMS.projName'));
-			$htm = 'postProcessorCONFEM.htm';
 		}
-		
-		echo Template::instance()->render($htm);
+		$f3->set('projNameSlug', $f3->get('PARAMS.projName'));
+		$f3->set('projName', str_replace( '-', ' ', $f3->get('PARAMS.projName')));
+		echo Template::instance()->render('postProcessor'.$solver.'.htm');
 	}
 	
 	public function confem($f3){
@@ -310,7 +321,7 @@ class PrepsAccountController extends PrepsController
 		
 		$path = 'data/'.$u.'/'.$pN;
 		
-		$this->deleteDirectory($path);
+		$this->deleteDirectory($f3, $path);
 		
 		$this->loadProj($f3);
 	}
@@ -412,12 +423,18 @@ project_parameters.txt - params
 		
 		if ($solverType == 'SPOLY')
 			$solver = new PrepsSolverSpolyController($f3);
-		elseif ($solverType == 'SPATRUS')
-			$solver = new PrepsSolverSpatrusController($f3);
+		
+		elseif ($solverType == 'PATRUS')
+			$solver = new PrepsSolverPatrusController($f3);
+			
+		elseif ($solverType == 'MATRUS')
+			$solver = new PrepsSolverMatrusController($f3);
+			
 		elseif ($solverType == 'CONFEM')
 			$solver = new PrepsSolverConfemController($f3);
 		
-		$solver->generateInputData($postData, $propArray, $consArray, $user);
+		$solver->generateInputData($postData, $propArray, $consArray);
+		$solver->saveInputData($f3->get('useExternalServer'), $user, $this->getSsh($f3));
 		
 		echo json_encode(array('success','The project "'.str_replace('-', ' ', $projectName).'" has been saved!'));
 		die();

@@ -47,9 +47,6 @@ QF.display = function(){
 	
 	this.dragging = true;
 	this.processSelected();
-	//this.processDelete();
-	//processCopy(this);
-	//processEdit(this);
   };
   
   
@@ -62,12 +59,9 @@ QF.display = function(){
 		this.processDrag(data, this);
 		this.moved = true;
 	}
-	
-	//this.initParticleNo(data);
   }
   this.mouseup = this.mouseupoutside = this.touchend = this.touchendoutside = function(data) {
     this.dragging = false;
-	console.log(this);
   };
   
   this.processSelected = function(){

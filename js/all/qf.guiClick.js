@@ -7,6 +7,7 @@ $(document).ready(function(){
 	;
 	
 	function formpostcompleted(json){
+		cm.hideProgress();
 		if (json[1])
 			alert(json[1]);
 	}
@@ -70,6 +71,8 @@ $(document).ready(function(){
 	$('#spasConsTab').bind('click', function(){
 		if (typeof QF.setting.solverVal.analysis === 'undefined'){
 			alert('Please save CONFEM solver information before proceed!');
+		}else{
+			lg.loadSpasCons();
 		}
 	});
 	
@@ -168,8 +171,9 @@ $(document).ready(function(){
 			//elements: QF.setting.elementIndexArray
 		}
 		var mergedJson = JSON.stringify(mergedObj);
-		//console.log(mergedObj);
+		console.log(mergedObj);
 		//console.log(mergedJson);
+		cm.loadProgress();
 		$.post(
 			QF.setting.serv_pSave,
 			mergedJson,
@@ -357,6 +361,23 @@ $(document).ready(function(){
 		//lg.genSpasCons();
 	});
 	
+	$('#addRowNodeBtn').bind('click', function(){
+		QF.setting.dataEditorNode.push({});
+		QF.setting.hotEditorNode.loadData(QF.setting.dataEditorNode);
+	});
+	
+	$('#addRowElemBtn').bind('click', function(){
+		QF.setting.dataEditorElem.push({});
+		QF.setting.hotEditorElem.loadData(QF.setting.dataEditorElem);
+	});
+	
+	$('#addSpasLayerEditor').bind('click', function(){
+		if (QF.setting.dataEditorSpas.length == 0){
+			QF.setting.dataEditorSpas=[{layer:1,thickness:'1', type:'REGULAR', prop:'1', mSubV:'6', mRatioV:'1',eType:'8 - Quadratic Quad'}];
+		}
+		QF.setting.hotEditorSpas.loadData(QF.setting.dataEditorSpas);
+	});
+
 	$('#modalElemPropEditBtn').bind('click', function(){
 		$.post(
 			QF.setting.serv_propSaveEdit,
@@ -406,19 +427,32 @@ $(document).ready(function(){
 		]);
 	});
 	
+	$('.modalForceBtn').bind('click', function(){
+		var id="modalForce";
+		QF.setting.selectedObj[0].obj.force = {
+			x:cm.inVal(id,'forceX'),
+			y:cm.inVal(id,'forceY')
+		};
+		QF.setting.selectedObj = [];
+	});
+	
 	$('.modalElemPropBtn').bind('click', function(){
 		var id='#beamProp'
 			,nameB = cm.inVal(id,'name')
 			,ym = cm.inVal(id,'youngModulus')
 			,pr = cm.inVal(id,'poissonRatio')
 			,a = cm.inVal(id,'area')
+			,temp = cm.inVal(id,'temp')
+			,LOF = cm.inVal(id,'LOF')
+			,alpha = cm.inVal(id,'alpha')
+			,ro = cm.inVal(id,'ro')
 			,mi = cm.inVal(id,'moment')
 			,ty = cm.inSelVal(id, 'type')
 			,beamProp={}
 		;
 		if (ym!='' || pr!='' || a!='' || mi!='' ){
-			beamProp={name:nameB, youngModulus:ym, poissonRatio:pr, area:a, moment:mi, type:ty};
-			cm.inValEmpty(id, ['name','youngModulus', 'poissonRatio','area','moment']);
+			beamProp={name:nameB, youngModulus:ym, poissonRatio:pr, area:a, moment:mi, type:ty, temp:temp, LOF:LOF, alpha:alpha, ro:ro};
+			cm.inValEmpty(id, ['name','youngModulus', 'poissonRatio','area','moment','temp', 'LOF','alpha','ro']);
 		}
 		
 		var 
@@ -507,11 +541,12 @@ $(document).ready(function(){
 	
 	//FINITE ELEMENT
 	$('#modalSubdivideBtn').bind('click', function(){
-		var id = '#modalSubdivide'
-			,subX = parseInt(cm.inVal(id,'subDivideX'))
-			,subY = parseInt(cm.inVal(id,'subDivideY'))
-		;
-		lgFE.processSubdivision(subX, subY);
+		var id = '#modalSubdivide';
+		lgFE.processSubdivision(
+			parseInt(cm.inVal(id,'subDivideX')),
+			parseInt(cm.inVal(id,'subDivideY')),
+			cm.inSelVal(id,'subDivideType')
+		);
 	});
 	
 	$('#modalNodesAttrBtn').bind('click', function(){
@@ -551,7 +586,7 @@ $(document).ready(function(){
 			exY = parseFloat(cm.inVal(id,'extrudeY')),
 			leaveOri = cm.inCheckVal(id,'extrudeLeave');
 			
-		lg.processExtrusion(exX, exY, leaveOri);
+		lgFE.processExtrusion(exX, exY, leaveOri);
 	});
 	
 	//SOLVER
@@ -583,13 +618,13 @@ $(document).ready(function(){
 		console.log(QF.setting.solverSpoly);
 		QF.setting.solverVal = QF.setting.solverSpoly;
 	});
-	$('#modalSolverPatrusBtn').bind('click', function(){
+	/*$('#modalSolverPatrusBtn').bind('click', function(){
 		QF.setting.solverType = 'PATRUS';
 		var id="#modalSolverPatrus";
 		
 		QF.setting.solverPatrus = {};
 		QF.setting.solverVal = QF.setting.solverPatrus;
-	});
+	});*/
 	$('#modalSolverSpasBtn').bind('click', function(){
 		QF.setting.solverType = 'CONFEM';
 		var id="#modalSolverSpas";

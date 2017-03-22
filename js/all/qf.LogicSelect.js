@@ -41,7 +41,7 @@ QF.LogicSelect = function(){
 				child.clearDirty = true;
 			}
 		}
-	console.log(QF.setting.selectedObj);
+		console.log(QF.setting.selectedObj);
 		selectArea.visible = false;
 		QF.setting.startSelection = false;
 		//QF.setting.isSelect = false;
@@ -54,7 +54,13 @@ QF.LogicSelect = function(){
 		selectArea.clear();
 		selectArea.visible = true;
 		selectArea.beginFill(0x0000ff, 0.3);
-		selectArea.drawRect(pt.x, pt.y, mousePos.x - pt.x, mousePos.y - pt.y);
+		var newPoint = {x1:pt.x, y1:pt.y, x2:mousePos.x - pt.x, y2:mousePos.y - pt.y};
+		
+		if (newPoint.x2 < 0){
+			 newPoint.x1 = newPoint.x1 + newPoint.x2,
+			 newPoint.x2 = - newPoint.x2
+		}
+		selectArea.drawRect(newPoint.x1, newPoint.y1, newPoint.x2, newPoint.y2);
 	}
 	
 	this.unselectAll = function(){

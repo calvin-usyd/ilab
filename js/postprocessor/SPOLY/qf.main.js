@@ -1,10 +1,12 @@
-"use strict";
-var 
-	renderer
+//"use strict";
+
+var renderer
 	,stage = new PIXI.Stage(0xffffff, true)
+	//stage = new PIXI.Container()//v3
 	,lg = new QF.Logic()
 	,selectArea = new PIXI.Graphics()
 	,startSelection = false
+	,cm = QF.Common();
 ;
 
 function initRenderer(){
@@ -30,8 +32,8 @@ function initGrid(){
 function initSelectionArea(){
 	stage.addChild(selectArea);
 }
-
 initRenderer();
 //initGrid();
 initSelectionArea();
 requestAnimationFrame(animate);
+crtl.getFileList();

@@ -12,6 +12,10 @@ $(function(){
 		"Young's modulus",
 		"Poisson's ratio",
 		"Area",
+		"Temperature",
+		"LOF",
+		"Alpha",
+		"RO",
 		"Moment of inertia",
 		"Thickness",
 		"Delete"
@@ -21,10 +25,14 @@ $(function(){
 		{data:"name",width: 100},
 		{data:"type",width: 100},
 		{data:"pType",width: 100},
-		{data:"youngModulus",width: 200},
-		{data:"poissonRatio",width: 200},
+		{data:"youngModulus",width: 150},
+		{data:"poissonRatio",width: 150},
 		{data:"area",width: 100},
-		{data:"moment",width: 200},
+		{data:"Temp",width: 100},
+		{data:"LOF",width: 100},
+		{data:"alpha",width: 100},
+		{data:"ro",width: 100},
+		{data:"moment",width: 150},
 		{data:"thinkness",width: 100},
 		{data:"delete",type:'checkbox'}
 	],
@@ -156,7 +164,7 @@ $(function(){
 		'Mesh Ratio Vertical', 
 		'Element Type'
 	],
-	colHeadersNodes=['X', 'Y', 'constraint'],
+	colHeadersNodes=['X', 'Y', 'constraint', 'delete'],
 	colHeadersElem=['Index', 'Property', 'Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'],
 	colHeadersSpoly=['Index', 'constraint', 'property', 'mark', 'radius', 'Vertices Count', 'X', 'Y'],
 	excelColumnEditorSpas=[
@@ -177,7 +185,8 @@ $(function(){
 	excelColumnEditorNode=[
 		{data:"x",width: 100,type:'numeric',format:'0.00'},
 		{data:"y",width: 100,type:'numeric',format:'0.00'},
-		{data:"constraint",width: 100,type:'numeric',format:'0'}
+		{data:"constraint",width: 100,type:'numeric',format:'0'},
+		{data:"delete",type:'checkbox'}
 	],
 	excelColumnEditorElem=[
 		{data:"index",width: 100},

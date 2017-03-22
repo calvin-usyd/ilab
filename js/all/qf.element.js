@@ -25,7 +25,7 @@ this.initElementNo = function(nodeIndexArray){
 	elemNoText.position.x = elemNoPost.x;
 	elemNoText.position.y = elemNoPost.y;
 	elemNoText.visible = QF.setting.elementNoVisibility;
-	stage.addChild(elemNoText);
+	this.addChild(elemNoText);
 	QF.setting.elementNoTextArray.push(elemNoText);
 }
 this.getCenterOfLine = function(nodeIndexArray){

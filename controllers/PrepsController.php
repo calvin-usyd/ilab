@@ -1,11 +1,32 @@
 <?php
+set_include_path('/home3/leewe27/public_html/ilab/controllers/phpseclib1.0.5');
+include('Net/SFTP.php');
+//include('Net/SSH2.php');
+include('Net/SCP.php');
+include('Crypt/RSA.php');
+
 class PrepsController {
+	var $projName;
+	var $solverPath = "data";
+	
 	function __construct($f3) {
+		$db_option = $f3->get('db_option');
 		$this->db=new DB\SQL(
-			$f3->get('db_dns') . $f3->get('db_name'),
-			$f3->get('db_user'),
-			$f3->get('db_pass')
+			$f3->get('db_dns') . $f3->get($db_option . '_db_name'),
+			$f3->get($db_option . '_db_user'),
+			$f3->get($db_option . '_db_pass')
 		);
+		
+		$appPath = $f3->get('appPath');
+		$autoLoadArr = explode("|", $f3->get('AUTOLOAD'));
+		$autoLoadStr = $appPath . $autoLoadArr[0];
+		for($i=1; $i<count($autoLoadArr); $i++){
+			$autoLoadStr .= '|' . $appPath . $autoLoadArr[$i];
+		}
+		
+		$f3->set('AUTOLOAD', $autoLoadStr);
+		$f3->set('UI', $appPath . $f3->get('UI'));
+		$f3->set('UPLOADS', $appPath . $f3->get('UPLOADS'));
 		
 		$this->fn = array(
 			'particle'=>'particles.txt',
@@ -75,26 +96,33 @@ class PrepsController {
 		return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 	}
 	
-	function deleteDirectory($dir) {
-		if (!file_exists($dir)) {
+	function deleteDirectory($f3, $dir) {
+		if ($f3->get('useExternalServer')){
+			$ssh = $this->getSsh($f3);
+			echo $ssh->exec("rm -R $dir");
 			return true;
-		}
-
-		if (!is_dir($dir)) {
-			return unlink($dir);
-		}
-
-		foreach (scandir($dir) as $item) {
-			if ($item == '.' || $item == '..') {
-				continue;
+			
+		}else{
+			if (!file_exists($dir)) {
+				return true;
 			}
 
-			if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-				return false;
+			if (!is_dir($dir)) {
+				return unlink($dir);
 			}
-		}
 
-		return rmdir($dir);
+			foreach (scandir($dir) as $item) {
+				if ($item == '.' || $item == '..') {
+					continue;
+				}
+
+				if (!$this->deleteDirectory($f3, $dir . DIRECTORY_SEPARATOR . $item)) {
+					return false;
+				}
+			}
+
+			return rmdir($dir);			
+		}
 	}
 	public function processUpload(){
 		
@@ -129,5 +157,70 @@ class PrepsController {
 		//$name = pathinfo($name['0'], PATHINFO_BASENAME);
 		return $name['0'];
 		//return $name;
+	}
+	
+	function getSsh($f3, $isSftp = false){
+		$loggedIn = false;
+		$serverType = $f3->get('externalServerType');
+		$ipAdd = $f3->get($serverType . '_IP');
+		$pass = $f3->get($serverType . '_PASS');
+		$sName = $f3->get($serverType . '_sName');
+		
+		if ($isSftp){
+			$ssh = new Net_SFTP($ipAdd);
+		}else{
+			$ssh = new Net_SSH2($ipAdd);
+		}
+		if ($f3->get($serverType . '_useKey')){
+			$rsa = new Crypt_RSA();
+			$rsa->setPassword($pass);
+			$rsa->loadKey(file_get_contents($f3->get($f3->get('appPath') . $serverType . '_pKey')));
+			$loggedIn = $ssh->login($f3->get($serverType . '_USER'), $rsa);
+			
+		}else{
+			$loggedIn = $ssh->login($f3->get($serverType . '_USER'), $pass);
+		}
+		if (!$loggedIn) {
+			$this->echoJson(array('Danger', 'Login Failed at external server: ' . $sName));
+		}
+		return $ssh;
+	}
+	
+	function generateFile($user, $filename, $data, $projectName){
+		$pNameSlug = Web::instance()->slug($projectName);
+		//$filename = Web::instance()->slug($filename);
+		$path = 'data/'.$user.'/'.$pNameSlug.'/';
+		
+		if (!file_exists($path)) {
+			mkdir($path, 0755, true);
+		}
+		file_put_contents($path.$filename, $data);
+	}
+	
+	function getProjPathFrParam($f3){
+		$user = $f3->get('SESSION.user');
+		If ($user == ''){
+			return -1;
+		}
+		return 'data/'. $user . '/'. $f3->get('PARAMS.projName') . '/';
+	}
+	
+	function getOutputContent($f3, $file){
+		$projPath = $this->getProjPathFrParam($f3);
+		if ($projPath == -1){
+			return -1;//'Session expired!';
+		}
+		if ($f3->get('useExternalServer')){
+			//define('NET_SFTP_LOGGING', NET_SFTP_LOG_COMPLEX);
+			$ssh = $this->getSsh($f3, true);
+			return $ssh->get($projPath . $file) . '-';
+			//echo $ssh->getSFTPLog();
+		}
+		return file_get_contents($projPath . $file);
+		
+	}
+	
+	function echoJson($arr){
+		echo json_encode($arr);die();
 	}
 }

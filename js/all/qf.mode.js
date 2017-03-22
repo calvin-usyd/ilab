@@ -52,6 +52,7 @@ return Object.freeze({
 	},
 	initToggleDraw : function(settingIsTrue){
 		if (!QF.setting[settingIsTrue]){
+			QF.setting.isFESpas = false;
 			QF.setting.isFE = false;
 			QF.setting.isDE = false;
 			QF.setting.isSelect = false;
@@ -65,6 +66,11 @@ return Object.freeze({
 			success:lg.loadImageList
 		});
 	},
+	setUnitConversion : function(v){
+		QF.setting.unitVal=v;
+		initRulerText();		
+		usrP = cm.toMapPoint(canv.height, QF.setting.rulerOffset, QF.setting.unitVal);
+	},
 	
 	
 	
@@ -72,6 +78,9 @@ return Object.freeze({
 	
 	
 	//ALL ELEMENT
+	toggleDrawFeSpas : function(){
+		this.initToggleDraw('isFESpas');
+	},
 	toggleDrawFe : function(){
 		this.initToggleDraw('isFE');
 	},
@@ -88,7 +97,7 @@ return Object.freeze({
 	},
 	initElemCons : function(){
 		cm.popUp('#modalElemCons');
-		lg.loadSpasCons();
+		//lg.loadSpasCons();
 	},
 	initEditor : function(){
 		lgEditor.loadEditor();
@@ -160,7 +169,15 @@ return Object.freeze({
 	toggleElementNo : function(){
 		QF.setting.elementNoVisibility=!QF.setting.elementNoVisibility;
 		lgFE.toggleElementNo();
-	},	
+	},
+	toggleLoadText : function(){
+		QF.setting.loadTextVisibility=!QF.setting.loadTextVisibility;
+		lgFE.toggleLoadText();
+	},
+	toggleBoundaryCondition : function(){
+		QF.setting.bcTextVisibility=!QF.setting.bcTextVisibility;
+		lgFE.toggleBoundaryCondition();
+	},
 	setNodesAttr : function(){
 		cm.popUp('#modalNodesAttr');
 	},
@@ -179,6 +196,10 @@ return Object.freeze({
 			$(id + ' input[name=youngModulus]').val(elemAttrVal.youngModulus);
 			$(id + ' input[name=poissonRatio]').val(elemAttrVal.poissonRatio);
 			$(id + ' input[name=area]').val(elemAttrVal.area);
+			$(id + ' input[name=temp]').val(elemAttrVal.temp);
+			$(id + ' input[name=LOF]').val(elemAttrVal.LOF);
+			$(id + ' input[name=alpha]').val(elemAttrVal.alpha);
+			$(id + ' input[name=ro]').val(elemAttrVal.ro);
 			$(id + ' input[name=moment]').val(elemAttrVal.moment);
 			$(id + ' input[name=thickness]').val(elemAttrVal.thickness);
 			
@@ -186,6 +207,10 @@ return Object.freeze({
 			$(id + ' input[name=youngModulus]').val('');
 			$(id + ' input[name=poissonRatio]').val('');
 			$(id + ' input[name=area]').val('');
+			$(id + ' input[name=temp]').val('');
+			$(id + ' input[name=LOF]').val('');
+			$(id + ' input[name=alpha]').val('');
+			$(id + ' input[name=ro]').val('');
 			$(id + ' input[name=moment]').val('');
 			$(id + ' input[name=thickness]').val('');
 			
@@ -199,7 +224,6 @@ return Object.freeze({
 			;
 			
 			for (i=0; i<props.length; i++){
-				console.log(props[i]);
 				if (props[i] == 'area'){
 					$(id + ' .fgArea').removeClass('hide');
 					hasArea = true;
@@ -266,6 +290,22 @@ return Object.freeze({
 		cm.popUp('#modalSubdivide');
 	},
 	
+	//PATRUS
+	initForce : function(){
+		if(cm.hasSelected()){
+			var id="modalForce";
+			var fc = QF.setting.selectedObj.obj.force;
+			var fX='',fY='';
+			if (fc){
+				fX=fc.x;
+				fY=fc.y;
+			}
+			cm.inValSet(id, 'forceX', fX);
+			cm.inValSet(id, 'forceY', fY);
+			cm.popUp('#modalForce');
+		}
+	},
+	
 	
 	//SOLVER
 	initSpoly : function(){
@@ -296,7 +336,12 @@ return Object.freeze({
 		}
 		cm.popUp('#modalSolverSpoly');
 	},
+	initMatrus : function(){
+		alert('Únder development!');
+		//cm.popUp('#modalSolverPatrus');		
+	},
 	initPatrus : function(){
+		QF.setting.solverType = 'PATRUS';
 		cm.popUp('#modalSolverPatrus');		
 	},
 	initSpas : function(){
@@ -346,7 +391,7 @@ return Object.freeze({
 		if (sT == 'SPOLY'){
 			param = QF.setting.solverSpoly.sim.simulationName;
 			
-		}else if(sT == 'CONFEM'){
+		}else if(sT == 'CONFEM' || sT == 'PATRUS'){
 			param = '';
 
 		}else{
@@ -374,8 +419,22 @@ return Object.freeze({
 			if (sT == 'CONFEM'){
 				sol = username +'/'+ sT;
 			}
-			
-			window.open(QF.setting.serv_exe[sT] + pName + '&u=' + username +'&s=' + sol + '&' + (new Date()).getMilliseconds(), '_blank', 'menubar=0,toolbar=0,location=0,fullscreen=yes');
+			cm.loadProgress();
+			if (QF.setting.useExternalServer){
+				$.post(
+					QF.setting.serv_exe[sT],
+					{p:pName},
+					function(json){
+						if (json.length == 2){
+							alert(json[1])
+						}
+						cm.hideProgress();
+					},
+					"json"					
+				);
+			}else{
+				window.open(QF.setting.serv_exe[sT] + pName + '&u=' + username +'&s=' + sol + '&' + (new Date()).getMilliseconds(), '_blank', 'menubar=0,toolbar=0,location=0,fullscreen=yes');
+			}
 		}
 	},
 	initProfile : function(){
@@ -388,7 +447,6 @@ return Object.freeze({
 			url:QF.setting.serv_profileView,
 			dataType: 'json',
 			success: function(json){
-				console.log(json);
 				cm.inValSet(id, 'username', json['username']);
 				cm.inValSet(id, 'email', json['email']);
 			}

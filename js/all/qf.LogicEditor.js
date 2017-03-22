@@ -1,7 +1,20 @@
 "use strict";
 
 QF.LogicEditor = function(){
-this.genSpasGui = function(){
+this.setSpasExcel = function(nodes){
+	var thick = nodes[2].y - nodes[1].y;
+	QF.setting.dataEditorSpas.push({
+		layer:QF.setting.dataEditorSpas.length+1,
+		thickness:thick, 
+		type:'REGULAR', 
+		prop:'1', 
+		mSubV:'6', 
+		mRatioV:'1',
+		eType:'8 - Quadratic Quad'
+	});
+	QF.setting.hotEditorSpas.loadData(QF.setting.dataEditorSpas);
+}
+this.genSpasGuifromExcel = function(){
 	var filteredEmptyEditorSpas = _.filter(QF.setting.dataEditorSpas, function(n) {
 	  return (n.layer !== "" && typeof n.layer !== 'undefined' );
 	});
@@ -25,14 +38,6 @@ this.genSpasGui = function(){
 		mainNode2 = 0,
 		mainNode3 = 0,
 		mainNode4 = 0,
-		/*incLeftNode1 = 0,
-		incLeftNode2 = 0,
-		incLeftNode3 = 0,
-		incLeftNode4 = 0,
-		incRightNode1 = 0,
-		incRightNode2 = 0,
-		incRightNode3 = 0,
-		incRightNode4 = 0,*/
 		thickness = 0
 	;
 	var currentLayer=0;
@@ -51,26 +56,8 @@ this.genSpasGui = function(){
 			mainNode3 = {x:startX+dimension, y:lastY};
 			mainNode4 = {x:lastX, y:lastY};
 			
-			/*iRWidth = parseInt(layerObj.incRightWidth);
-			iRHeight = parseInt(layerObj.incRightHeight);
-			incRightNode1 = {x:mainNode2.x, y:mainNode2.y};
-			incRightNode2 = {x:mainNode2.x + iRWidth, y:mainNode2.y - iRHeight};
-			incRightNode3 = {x:mainNode2.x + iRWidth, y:mainNode2.y - iRHeight + thickness};
-			incRightNode4 = {x:mainNode3.x, y:mainNode3.y};
-
-			iLWidth = parseInt(layerObj.incLeftWidth);
-			iLHeight = parseInt(layerObj.incLeftHeight);
-			incLeftNode1 = {x:mainNode1.x, y:mainNode1.y};
-			incLeftNode2 = {x:mainNode4.x, y:mainNode4.y};
-			incLeftNode3 = {x:mainNode4.x - iLWidth, y:mainNode4.y - iLHeight};
-			incLeftNode4 = {x:mainNode1.x - iLWidth, y:mainNode4.y - iLHeight - thickness};
-			console.log({mainNode1, mainNode2, mainNode3, mainNode4});
-			console.log({incRightNode1, incRightNode2, incRightNode3, incRightNode4});
-			console.log({incLeftNode1, incLeftNode2, incLeftNode3, incLeftNode4});*/
-			
 			//At bottom most layer, the inclination layer Y same as main layer y
 			if (currentLayer == filteredEmptyEditorSpas.length-1){
-				//console.log('isBottomMostLayer');
 				//incRightNode3.y = incLeftNode3.y = mainNode3.y;
 			}
 			//if (doRefreshCoordinate && typeof QF.setting.nodeObjArray[nIndex] != 'undefined'){
@@ -98,25 +85,6 @@ this.genSpasGui = function(){
 					nodeObj.x = mainNode4.x;
 					nodeObj.y = mainNode4.y;
 					
-					/*var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incRightNode2);
-					nodeObj.x = incRightNode2.x;
-					nodeObj.y = incRightNode2.y;
-					
-					var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incRightNode3);
-					nodeObj.x = incRightNode3.x;
-					nodeObj.y = incRightNode3.y;
-					
-					var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incLeftNode3);
-					nodeObj.x = incLeftNode3.x;
-					nodeObj.y = incLeftNode3.y;
-					
-					var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incLeftNode4);
-					nodeObj.x = incLeftNode4.x;
-					nodeObj.y = incLeftNode4.y;*/
 				}else{
 					var nodeObj = QF.setting.nodeObjArray[nIndex++];
 					nodeObj.o.refreshCoordinate(mainNode3);
@@ -127,17 +95,6 @@ this.genSpasGui = function(){
 					nodeObj.o.refreshCoordinate(mainNode4);
 					nodeObj.x = mainNode4.x;
 					nodeObj.y = mainNode4.y;
-					
-					/*var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incRightNode3);
-					nodeObj.x = incRightNode3.x;
-					nodeObj.y = incRightNode3.y;
-					
-					var nodeObj = QF.setting.nodeObjArray[nIndex++];
-					nodeObj.o.refreshCoordinate(incLeftNode3);
-					nodeObj.x = incLeftNode3.x;
-					nodeObj.y = incLeftNode3.y;*/
-					
 				}
 			}
 
@@ -146,23 +103,7 @@ this.genSpasGui = function(){
 				lgFE.drawNode(mainNode2);
 				lgFE.drawNode(mainNode3);
 				lgFE.drawNode(mainNode4);
-				lgFE.drawFEByRightClick();
-				
-				//Inclination Right
-				/*lgFE.drawNode(incRightNode1);
-				lgFE.drawNode(incRightNode2);
-				lgFE.drawNode(incRightNode3);
-				lgFE.drawNode(incRightNode4);
-				lgFE.drawFEByRightClick();
-				
-				//Inclination Left
-				lgFE.drawNode(incLeftNode1);
-				lgFE.drawNode(incLeftNode2);
-				lgFE.drawNode(incLeftNode3);
-				lgFE.drawNode(incLeftNode4);
-				lgFE.drawFEByRightClick();
-				console.log(QF.setting.elementIndexArray);*/
-				
+				lgFE.drawFEByRightClick();			
 			}
 
 			if(startCreateElemForRefreshCoordinate && currentLayer == totalLayersCreated-1){
@@ -187,10 +128,9 @@ this.genSpasGui = function(){
 					});
 					
 					if (filteredArray.length > 0){
-						lgFE.drawElement(filteredArray, prop);
+						lgFE.drawElement(filteredArray, true, prop);
 					}
 				});
-				console.log(QF.setting.elementIndexArray);
 			}
 			startX = lastX;
 			startY = lastY;
@@ -199,8 +139,7 @@ this.genSpasGui = function(){
 	});
 }
 this.processSavedEditor = function(){
-	var systemY = cm.toUserPointY(QF.setting.canv.height);
-	
+	//var systemY = cm.toUserPoint(QF.setting.canv.height, QF.setting.rulerOffset, QF.setting.unitVal);
 	//SPAS EDITOR
 	var id="#spasEditorForm";
 	QF.setting.spasEditorForm={
@@ -214,11 +153,14 @@ this.processSavedEditor = function(){
 	}
 	
 	if (QF.setting.nodeObjArray.length > 0){
-		lgFE.removeNodesNo();
-		lgFE.removeElementObjAndNo();
+		if (QF.setting.hasChangedEditorN){
+			lgFE.removeNodesNo();
+		}
+		lgFE.removeAllElementObjAndNo();
 	}
 	
-	lgEditor.genSpasGui();
+	//Todo: Should redraw element
+	//lgEditor.genSpasGuifromExcel();
 	
 	var DES = QF.setting.dataEditorSpas;
 	//QF.setting.dataEditorSpas.push({layer:DES[DES.length-1].layer+1,thickness:'1', type:'REGULAR', prop:'1', mSubV:'6', mRatioV:'1',eType:'8 - Quadratic Quad'});
@@ -226,43 +168,56 @@ this.processSavedEditor = function(){
 	
 	//NODES EDITOR
 	if (QF.setting.hasChangedEditorN){
-		var nIndex=0, doRecreateNode=false;
+		var nIndex=0;/*, doRecreateNode=false;
 		
 		if (QF.setting.nodeObjArray.length != QF.setting.dataEditorNode.length){
 			doRecreateNode = true;
-		}
+		}*/
 		//REBUILD NODES
 		//QF.setting.nodeNoTextArray=[];
 		_.forEach(QF.setting.dataEditorNode, function(o){
+			if (o.delete){
+				mapXY=usrP.system(o.x, o.y);
+				lgFE.removeNodeObjAndNoByIndex(lgFE.getNodeIndex(mapXY)-1);			
+			}
+		});
+		QF.setting.dataEditorNode = _.filter(QF.setting.dataEditorNode, function(o){
+			return (typeof o.x!=='undefined' && typeof o.y!=='undefined' && !o.delete);
+		});
+		_.forEach(QF.setting.dataEditorNode, function(o){
 			var 
 			c=o.constraint,
-			x=o.x,
-			y=systemY(o.y),
+			mapXY=usrP.system(o.x, o.y),
+			//x=o.x,
+			//y=systemY(o.y),
 			node=QF.setting.nodeObjArray[nIndex]
 			;
-			
+			mapXY.constraint=c;
 			//NEW DATA ADDED
-			if (doRecreateNode){
-				lgFE.drawNode({x:x, y:y});
+			if (lgFE.getNodeIndex(mapXY) == 0){
+				lgFE.drawNode(mapXY);
 			}else{
 				//EXISTING DATA UPDATED
 				node.o.removeChildren();
 				/*_.forEach(node.o.children, function(o){
 					node.o.removeChild(o);
 				});*/
-				
-				node.o.refreshCoordinate({x:x, y:y, c:c});
-				node.x=x;
-				node.y=y;
+				//node.o.refreshCoordinate({x:x, y:y, c:c});
+				node.o.refreshCoordinate(mapXY);
+				node.x=mapXY.x;
+				node.y=mapXY.y;
 				nIndex++;
 			}
 		});
 	}
 		
 	if (QF.setting.hasChangedEditorN || QF.setting.hasChangedEditorElem){
+		if (QF.setting.nodeObjArray.length == 0){
+			alert('ERROR: Cannot create element! There must be at least 2 nodes to create an element.');
+			return;
+		}
 		//DESTROY ALL ELEMENTS
-		lgFE.removeElementObjAndNo();
-		
+		lgFE.removeAllElementObjAndNo();
 		//REBUILD ELEMENTS
 		_.forEach(QF.setting.dataEditorElem, function(o){
 			var 
@@ -278,11 +233,10 @@ this.processSavedEditor = function(){
 			;
 			
 			filteredArray = _.filter(arr, function(n) {
-			  return (n != "" && typeof n !== 'undefined');
+			  return (n != "" && typeof n !== 'undefined' && n !== null);
 			});
-			
 			if (filteredArray.length > 0){
-				lgFE.drawElement(filteredArray, prop);
+				lgFE.drawElement(filteredArray, true, prop);
 			}
 		});
 	}
@@ -297,11 +251,11 @@ this.processSavedEditor = function(){
 		rad,
 		con,
 		vCount,
-		x, y
+		mapXY
 		
 		_.forEach(QF.setting.dataEditorSpoly, function(o, k){
-			x=o.x;
-			y=systemY(o.y);			
+			//x=o.x;
+			//y=systemY(o.y);			
 			
 			if (o.index !== ''){
 				ind=o.index;
@@ -311,8 +265,13 @@ this.processSavedEditor = function(){
 				prop=o.prop;
 				vCount=(o.numOfVertices-1) + k;
 			}
-			
-			deAttr.push({x:x, y:y, r:rad, m:mrk, c:con, p:prop});
+			mapXY = usrP.system(o.x, o.y);
+			mapXY.r=rad;
+			mapXY.m=mark;
+			mapXY.c=con;
+			mapXY.p=prop;
+			deAttr.push(mapXY);
+			//deAttr.push({x:x, y:y, r:rad, m:mrk, c:con, p:prop});
 			
 			if (k==vCount){
 				var deObj = QF.setting.deObjArray[ind];
@@ -341,11 +300,11 @@ this.processSavedEditor = function(){
 }
 this.loadEditor = function(){
 	//hotExN.loadData(Handsontable.helper.createSpreadsheetData(2, 2));
-	var userY = cm.toUserPointY(QF.setting.canv.height);
+	//var userY = cm.toUserPointY(QF.setting.canv.height, QF.setting.rulerOffset, QF.setting.unitVal);
 	var excelEditorDe=[];
 	//EDITOR ELEMENT
 	var excelEditorElem=_.map(QF.setting.elementIndexArray, function(o, k){
-		return {index:k, prop:o.prop, node1:o.nodes[0], node2:o.nodes[1], node3:o.nodes[2], node4:o.nodes[3], node5:o.nodes[4]};
+		return {index:k+1, prop:o.prop, node1:o.nodes[0], node2:o.nodes[1], node3:o.nodes[2], node4:o.nodes[3], node5:o.nodes[4]};
 	});
 	
 	if (excelEditorElem.length == 0){
@@ -369,13 +328,14 @@ this.loadEditor = function(){
 			var pointArray = o.currentPath.shape.points;
 			pts = pointArray;
 		}
-		
+		var mapXY = usrP.user(pts[0], pts[1]);
 		len=pts.length;
-		console.log(pts);
-		excelEditorDe.push({index:k, constraint:o.constraint, prop:o.property, mark:o.mark, radius:o.radius, numOfVertices:len/2, x:pts[0], y:userY(pts[1])});
+		//excelEditorDe.push({index:k, constraint:o.constraint, prop:o.property, mark:o.mark, radius:o.radius, numOfVertices:len/2, x:pts[0], y:userY(pts[1])});
+		excelEditorDe.push({index:k, constraint:o.constraint, prop:o.property, mark:o.mark, radius:o.radius, numOfVertices:len/2, x:mapXY.x, y:mapXY.y});
 			
 		for (var x=2; x<len; x+=2){
-			excelEditorDe.push({index:'', constraint:'', prop:'', mark:'', radius:'', numOfVertices:'', x:pts[x], y:userY(pts[x+1])});
+			//excelEditorDe.push({index:'', constraint:'', prop:'', mark:'', radius:'', numOfVertices:'', x:pts[x], y:userY(pts[x+1])});
+			excelEditorDe.push({index:'', constraint:'', prop:'', mark:'', radius:'', numOfVertices:'', x:mapXY.x, y:mapXY.y});
 		}
 	});
 	if (excelEditorDe.length == 0){
@@ -386,19 +346,17 @@ this.loadEditor = function(){
 	
 	//EDITOR NODE
 	var excelEditorNode = _.map(QF.setting.nodeObjArray, function(o){
-		return {x:o.x, y:userY(o.y), constraint:o.o.constraint};
+		var mapO = usrP.user(o.x, o.y);
+		mapO.constraint = o.o.constraint;
+		mapO.delete = false;
+		return mapO;
+		//return {x:o.x, y:userY(o.y), constraint:o.o.constraint};
 	});
 	if (excelEditorNode.length == 0){
-		excelEditorNode=[{x:'', y:'', constraint:''}];
+		excelEditorNode=[{x:'', y:'', constraint:'', delete: false}];
 	}
 	QF.setting.dataEditorNode=excelEditorNode;
 	QF.setting.hotEditorNode.loadData(excelEditorNode);
-	
-	//EDITOR SPAS
-	if (QF.setting.dataEditorSpas.length == 0){
-		QF.setting.dataEditorSpas=[{layer:1,thickness:'1', type:'REGULAR', prop:'1', mSubV:'6', mRatioV:'1',eType:'8 - Quadratic Quad'}];
-	}
-	QF.setting.hotEditorSpas.loadData(QF.setting.dataEditorSpas);
 }
 }
 QF.LogicEditor.prototype = new QF.LogicEditor;

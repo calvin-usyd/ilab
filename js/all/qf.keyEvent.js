@@ -16,8 +16,11 @@ window.addEventListener('keydown', function(event) {
 	keyArray[event.keyCode] = true;
 });
 window.oncontextmenu = function (){
-	if (QF.setting.isFE){
-		lgFE.drawFEByRightClick();
+	if (QF.setting.isFESpas){
+		lgFE.drawFEByRightClick(true);
+		
+	}else if (QF.setting.isFE){
+		lgFE.drawFEByRightClick(false);
 		
 	}else if (QF.setting.isDE){		
 		cm.popUp('#modalSetAttrDE');

@@ -8,22 +8,19 @@ class PrepsPostSpolyController extends PrepsController
     }
  
 	public function getPPPData($f3){
-		//$user = $f3->get('SESSION.user');		
-		//$projName = $f3->get('PARAMS.projName') . '/';
-		//$path = 'data/'.$user.'/' . $projName . $simu;
+		$user = $f3->get('SESSION.user');
+		$fileName = $f3->get('PARAMS.filename');
+		
+		$projName = $f3->get('PARAMS.projName') . '/';
 		
 		$simu = 'pics_' . $f3->get('PARAMS.simulation') . '/';
-		$fileName = $f3->get('PARAMS.filename');
-		/*
+
+		$path = 'data/'.$user.'/' . $projName . $simu;
+		
 		$mP = file_get_contents($path . 'mparticlet' . $fileName . '.txt');
 		$bP = file_get_contents($path . 'bparticlet' . $fileName . '.txt');
 		$cP = file_get_contents($path . 'cparticlet' . $fileName . '.txt');
 		$kP = file_get_contents($path . 'kparticlet' . $fileName . '.txt');
-		*/
-		$mP = $this->getOutputContent($f3, $simu . 'mparticlet' . $fileName . '.txt');
-		$bP = $this->getOutputContent($f3, $simu . 'bparticlet' . $fileName . '.txt');
-		$cP = $this->getOutputContent($f3, $simu . 'cparticlet' . $fileName . '.txt');
-		$kP = $this->getOutputContent($f3, $simu . 'kparticlet' . $fileName . '.txt');
 		
 		echo json_encode(array('mP'=>$mP, 'bP'=>$bP, 'cP'=>$cP, 'kP'=>$kP));
 		
@@ -31,26 +28,15 @@ class PrepsPostSpolyController extends PrepsController
 	}
 	
 	public function getPPPFilesName($f3){
-		//$user = $f3->get('SESSION.user');
-		//$projName = $f3->get('PARAMS.projName') . '/';
-		//$path = 'data/'.$user.'/' . $projName . $simu;
+		$user = $f3->get('SESSION.user');
+		$projName = $f3->get('PARAMS.projName') . '/';
+		
 		$simu = 'pics_' . $f3->get('PARAMS.simulation');
-		$projPath = $this->getProjPathFrParam($f3);
-		$path = $projPath . $simu;
+
+		$path = 'data/'.$user.'/' . $projName . $simu;
 		
-		if ($projPath == -1){
-			$this->echoJson(array('Danger', 'Session Expired!'));
-		}
+		$f = $this->getFileArray($path, 'txt', false);
 		
-		if ($f3->get('useExternalServer')){
-			//define('NET_SFTP_LOGGING', NET_SFTP_LOG_COMPLEX);
-			$ssh = $this->getSsh($f3, true);
-			$f = $ssh->exec('ls ' . $path);
-			$f = explode(PHP_EOL, $f);
-			//echo $ssh->getSFTPLog();
-		}else{
-			$f = $this->getFileArray($path, 'txt', false);
-		}
 		$filesN = [];
 		$fn = '';
 		
@@ -58,6 +44,7 @@ class PrepsPostSpolyController extends PrepsController
 			$fn = basename($path, '.txt');
 			
 			if ($this->startsWith($fn, 'cparticle')){
+				;
 				array_push($filesN, explode('t', str_replace('cparticle', '', $fn))[1]);
 			}
 		}

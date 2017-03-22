@@ -1,7 +1,9 @@
 <?php
 class PrepsSolverConfemController extends PrepsController{
+	private $contentStr;
+	private $solverName = "CONFEM.exe";
 	
-	function generateInputData($postData, $propArray, $consArray, $user){		
+	function generateInputData($postData, $propArray, $consArray){		
 		$contentStr = $this->genTitle(Web::instance()->slug($postData['proj']));
 		$solver = $postData['solverVal'];
 		$gui = $postData['gui'];
@@ -13,13 +15,33 @@ class PrepsSolverConfemController extends PrepsController{
 		$contentStr = $contentStr . $this->genTime($solver['time']);
 		$contentStr = $contentStr . $this->genMeshing($gui['mesh']);
 		$contentStr = $contentStr . $this->genControls($solver['controls']);
-		
-		$pNameSlug = Web::instance()->slug($postData['proj']);
-		$this->generateFile($user, $pNameSlug . ".spa", $contentStr, $pNameSlug);
-		$this->moveExe($user, $pNameSlug);
+		$this->contentStr = $contentStr;
+		$this->projName = Web::instance()->slug($postData['proj']);
+	}
+	
+	function saveInputData($useExternalServer, $user, $ssh){		
+		$fn = "input.spa";
+		$projPath = $this->solverPath . '/'. $user . '/'. $this->projName;
+		if ($useExternalServer){
+			$scp = new Net_SCP($ssh);
+			$scp->put($fn, $this->contentStr);
+			echo $ssh->exec("mkdir -p $projPath");
+			echo $ssh->exec("mv $fn $projPath/.");
+		}else{
+			$this->generateFile($user, $this->projName . ".spa", $contentStr, $this->projName);
+			$this->moveExe($user, $this->projName);		
+		}
+	}
+	
+	function solve($useExternalServer, $projName, $user, $ssh){
+		$projPath = $this->solverPath . '/'. $user . '/'. $projName . '/';
+		if ($useExternalServer){
+			echo $ssh->exec("./$this->solverPath/$this->solverName $projPath");
+		}
 	}
 	
 	function moveExe($user, $projectName){
+		$pNameSlug = Web::instance()->slug($projectName);
 		$userPath = 'data/'.$user;
 		$nam = $userPath . '/confem3d.nam';	
 		$solver = $userPath . '/CONFEM.exe';
@@ -27,17 +49,8 @@ class PrepsSolverConfemController extends PrepsController{
 			copy('data/CONFEM.exe', $solver);
 		}
 		
-		$namData = $projectName . $this->newLine . $userPath . '/' . $projectName;
+		$namData = $pNameSlug . $this->newLine . $userPath . '/' . $pNameSlug;
 		file_put_contents($nam, $namData);
-	}
-	
-	private function generateFile($user, $filename, $data, $projectName){
-		$path = 'data/'.$user.'/'.$projectName.'/';
-		
-		if (!file_exists($path)) {
-			mkdir($path, 0755, true);
-		}
-		file_put_contents($path.$filename, $data);
 	}
 	
 	private function genTitle($data){

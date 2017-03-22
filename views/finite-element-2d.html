@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<title id="htmlTitle">*New Project | iLab</title>
+	<!--base href="/ilab/"/-->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<meta id="usernameId" content="{{@SESSION.user}}">
@@ -36,7 +37,8 @@
 	
 	<!--script src="js/stats.min.js"></script-->
 	<script src="js/dat.gui.js"></script>
-	<script src="js/pixi.js/pixi-v4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.2.2/pixi.min.js"></script>
+	<!--script src="js/pixi.js/pixi-v4.min.js"></script-->
 	<script src="js/all/qf.js"></script>
 	<script src="js/all/qf.util.js"></script>
 	
@@ -75,6 +77,7 @@
 	<script src="js/all/qf.LogicEditor.js?{{@microtime}}"></script>
 	<script src="js/all/qf.LogicSelect.js?{{@microtime}}"></script>
 	<script src="js/all/qf.finiteElement.js?{{@microtime}}"></script>
+	<script src="js/all/qf.arrow.js?{{@microtime}}"></script>
 	<script src="js/all/qf.node.js?{{@microtime}}"></script>
 	<script src="js/all/qf.element.js?{{@microtime}}"></script>
 	<script src="js/all/qf.guiClick.js?{{@microtime}}"></script>
@@ -82,7 +85,8 @@
 	<script src="js/all/qf.guiCrtl.js?{{@microtime}}"></script>
 	<script src="js/all/excelData.js?{{@microtime}}"></script>
 	<script src="js/all/main.js?{{@microtime}}"></script>
-	<div class="col-lg-12">Project Name: <b id="projName" class="text-muted"></b></div>
+	<div class="col-lg-12 text-muted small">Project Name: <b id="projName" class="text-success"></b></div>
+	<div id="overlayProgress" class=""></div>
 	<include href="modalFiles.htm"/>
 	<include href="modalSolverSpoly.htm"/>
 	<include href="modalSolverPatrus.htm"/>

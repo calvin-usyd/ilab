@@ -20,9 +20,6 @@ var stage = new PIXI.Stage(0xffffff, true)
 		y:0
 	};
 ;
-
-stage.addChild(selectArea);
-
 function initRenderer(){
 	// You can use either PIXI.WebGLRenderer or PIXI.CanvasRenderer
 	renderer = new PIXI.WebGLRenderer(canv.width, canv.height);
@@ -51,6 +48,9 @@ initBLimitGUI = function(value){
 }
 initTopLimitGUI = function(value){
 	topLimG.y=usrP(value);
+}
+function initSelectArea(){
+	stage.addChild(selectArea);
 }
 function initDomainLength(){
 	//len = canv.width-120;
@@ -292,6 +292,7 @@ initAxes();
 initRulerX();
 initRulerY();
 drawGrid("0x000000");
+initSelectArea();
 initDomainLength();
 initLeftLim();
 initRightLim();

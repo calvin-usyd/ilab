@@ -21,9 +21,15 @@ QF.setting = {
 	serv_pFileUpload : url+'projectFileUpload/',
 	serv_pDelete : url+'projectDelete/',
 	serv_pSave : url+'save/',
-	serv_exe : {
+	/*serv_exe : {
 		SPOLY : url+'cgi-bin/solve_spoly.py?p=',
-		CONFEM : url+'cgi-bin/solve_confem.py?p='
+		CONFEM : url+'cgi-bin/solve_confem.py?p=',
+		PATRUS : url+'cgi-bin/solve_patrus.py?p='
+	},*/
+	serv_exe : {
+		SPOLY : url+'solver/solve_spoly',
+		CONFEM : url+'solver/solve_confem',
+		PATRUS : url+'solver/solve_patrus'
 	},
 	serv_result : url+'result/',
 	/*serv_result : {
@@ -49,11 +55,14 @@ QF.setting = {
 	serv_profileEdit : url+'profileEdit/',
 	serv_activateSession : url+'activateSession/',
 	
+	useExternalServer : true,
+	
 	//SPAS
 	spasEditorForm:{},
 	spasConsForm:{},
 	
 	//All ELEMENT
+	isFESpas: false,
 	isFE: false,
 	isDE: false,
 	
@@ -65,6 +74,11 @@ QF.setting = {
 	nodeNoVisibility: false,
 	nodeNoTextArray: [],
 	elementNoTextArray: [],
+	arrowTextArray: [],
+	loadTextArray: [],
+	bcTextArray: [],
+	loadTextVisibility: false,
+	bcTextVisibility: false,
 	elementNoVisibility: false,
 	elementIndexArray: [],//[{type:beam2Truss, prop:prop1, nodes:[1,2,3]},...,...]
 	nodesAttrVal: {},
@@ -186,10 +200,11 @@ QF.setting = {
 	
 	
 	//COMMON
+	unitVal:1,
 	imageUploadLimit:4,
 	imageUploaded:0,
-	mouseX:0,
-	mouseY:0,
+	mouseX:0.01,
+	mouseY:0.01,
 	undoArray: [],
 	dotArray: [],
 	gridVisibility: true,
@@ -198,6 +213,7 @@ QF.setting = {
 	startSelection: false,
 	selectedObj: {},
 	rulerText:[],
+	rulerOffset:40,
 	selectionStartPoint: {x:-1, y:-1},
 	move: false,
 	snapGrid: true,
@@ -208,9 +224,9 @@ QF.setting = {
 	grid: {
 		height: minH,
 		width: 1208,//window.innerWidth,
-		size: 2,
-		distX:40,
-		distY:40
+		size: 1,
+		distX:20,
+		distY:20
 	},
-	offsetAlpha: 0.3
+	offsetAlpha: 0.7
 }

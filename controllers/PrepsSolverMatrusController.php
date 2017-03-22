@@ -1,12 +1,8 @@
 <?php
-class PrepsSolverSpolyController extends PrepsController{
-	private $vertStr;
-	private $tagsStr;
-	private $parameterData;
-	private $simData;
-	private $solverName = "template.exe";
+class PrepsSolverMatrusController extends PrepsController{
 	
-	function generateInputData($postData, $propArray, $consArray){
+	function generateInputData($postData, $propArray, $consArray, $user){
+		
 		$tagsStr = "";
 		$vertStr = "";
 		$separator = $this->separator;
@@ -14,7 +10,7 @@ class PrepsSolverSpolyController extends PrepsController{
 		$particleArray = $gui['particle'];
 		$solverVal = $postData['solverVal'];
 		$solverParam = $solverVal['param'];
-		$this->projName = Web::instance()->slug($postData['proj']);
+		$projectName = Web::instance()->slug($postData['proj']);
 		
 		$len = count($particleArray);
 		
@@ -37,7 +33,7 @@ class PrepsSolverSpolyController extends PrepsController{
 			$mergeParameterData['ts'] = $solverParam['ts'];
 			$mergeParameterData['density'] = $propData['density'];
 			$mergeParameterData['cm'] = $solverParam['cm'];
-			$this->parameterData = $mergeParameterData;
+			$parameterData = $mergeParameterData;
 		}
 		
 		//START GENERATING FILES
@@ -79,47 +75,33 @@ class PrepsSolverSpolyController extends PrepsController{
 						$particleArray[$x]["r"] . $separator . 
 						count($particleData)/2 . $separator . 
 						$this->generateDataString($particleData, $separator) . $this->newLine .  $vertStr;
+			//echo json_encode(array('hi!'));
+		    //die();
 		}
-		$this->tagsStr = $tagsStr;
-		$this->vertStr = $vertStr;
-		$this->simData = $solverVal['sim'];
-	}
-	
-	function saveInputData($useExternalServer, $user, $ssh){		
-		$fnPart = "particles.txt";
-		$fnTags = "tags.txt";
-		$fnParam = "parameters.txt";
-		$fnProjParam = "project_parameters.txt";
 		
-		$projPath = $this->solverPath . '/'. $user . '/'. $this->projName;
-		if ($useExternalServer){
-			$scp = new Net_SCP($ssh);
-			$scp->put($fnPart, $this->vertStr);
-			$scp->put($fnTags, $this->tagsStr);
-			$scp->put($fnParam, $this->generateDataStringWithLabel($this->parameterData, $this->newLine));
-			$scp->put($fnProjParam, $this->generateDataStringWithLabel($this->simData, $this->newLine));
-			
-			echo $ssh->exec("mkdir -p $projPath");
-			echo $ssh->exec("mv $fnPart $fnTags $fnParam $fnProjParam $projPath/.");
-		}else{
-			$this->generateFile($user, $fnPart, $this->vertStr, $this->projName);
-			$this->generateFile($user, $fnTags, $this->tagsStr, $this->projName);
-			$this->generateFile($user, $fnParam, $this->generateDataStringWithLabel($this->parameterData, $this->newLine), $this->projName);
-			$this->generateFile($user, $fnProjParam, $this->generateDataStringWithLabel($this->simData, $this->newLine), $this->projName);	
-		}
+		//echo json_encode($particleArray);die();
+		$this->generateFile($user, "particles.txt", $vertStr, $projectName);
+		$this->generateFile($user, "tags.txt", $tagsStr, $projectName);
+		$this->generateFile($user, "parameters.txt", $this->generateDataStringWithLabel($parameterData, $this->newLine), $projectName);
+		$this->generateFile($user, "project_parameters.txt", $this->generateDataStringWithLabel($solverVal['sim'], $this->newLine), $projectName);
+		
 	}
 	
-	function solve($useExternalServer, $projName, $user, $ssh){
-		$projPath = 'data/'. $user . '/'. $projName;
-		if ($useExternalServer){
-			echo $ssh->exec("./$this->solverPath/$this->solverName $projPath");
+	private function generateFile($user, $filename, $data, $projectName){
+		$path = 'data/'.$user.'/'.Web::instance()->slug($projectName).'/';
+		
+		if (!file_exists($path)) {
+			mkdir($path, 0755, true);
 		}
+		
+		file_put_contents($path.$filename, $data);
 	}
 	
 	private function emptyToZero($val){
 		return $val == '' ? 0 : $val;
 	}
 	
+	//josy0414637372
 	private function generateDataString($dataArray, $separator){
 		$tempData="";
 		$counter=0;

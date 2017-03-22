@@ -18,29 +18,30 @@ var
 	,lgFE = new QF.LogicFE()
 	,lgProj = new QF.LogicProject()
 	,lgEditor = new QF.LogicEditor()
-	,usrP = cm.toUserPointY(canv.height)
+	,usrP = cm.toMapPoint(canv.height, QF.setting.rulerOffset, QF.setting.unitVal)
 	,coord = {
 		x:0,
 		y:0
 	};
 ;
-
-stage.addChild(selectArea);
-
 function initRenderer(){
 	// You can use either PIXI.WebGLRenderer or PIXI.CanvasRenderer
 	//renderer = new PIXI.WebGLRenderer(canv.width, canv.height);
+	PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 	renderer = new PIXI.autoDetectRenderer(canv.width, canv.height, {backgroundColor: 0xffffff});
 
 	renderer.view.onmousedown = function(e)
 	{
 		if (e.which == 1){
+			lgSelect.unselectAll();
 			if (QF.setting.isSelect){
-				lgSelect.unselectAll();
 				var mp = getMousePos();
 				QF.setting.selectionStartPoint = {x:mp.x, y:mp.y};
 
 				QF.setting.startSelection = true;
+				
+			}else if (QF.setting.isFESpas){
+				lgFE.drawNodeSnapGrid(getMousePos());
 				
 			}else if (QF.setting.isFE){
 				lgFE.drawNodeSnapGrid(getMousePos());
@@ -70,6 +71,9 @@ function initRenderer(){
 	document.body.appendChild(renderer.view);	
 }
 
+function initSelectArea(){
+	stage.addChild(selectArea);
+}
 function initStats(){
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
@@ -142,7 +146,6 @@ function initRulerY(){
 		rulerY.lineTo(5, y);
 	}
 	
-	var counterY = 0;
 	rulerBigY = new PIXI.Graphics();
 	rulerBigY.lineStyle(1, 0x000, 1);
 	
@@ -150,21 +153,31 @@ function initRulerY(){
 		rulerBigY.moveTo(0, y);
 		rulerBigY.lineTo(10, y);
 	}
-	
-	for (var y=grid.height; y>0; y-=40){
-		var text = new PIXI.Text(counterY, {fontFamily:"Arial", fontSize:"9px", fill:0x000000, align:'center'})
+	stage.addChild(rulerY);
+	stage.addChild(rulerBigY);
+}
+function initRulerText(){
+	_.forEach(QF.setting.rulerText, function(o){
+		stage.removeChild(o);
+	});
+	QF.setting.rulerText = [];
+	var rOffset = QF.setting.rulerOffset;
+	var counterY = -rOffset;
+	for (var y=grid.height-2; y>0; y-=rOffset){
+		var text = new PIXI.Text(counterY==0?"0":(counterY/QF.setting.unitVal).toFixed(2), {fontFamily:"Arial", fontSize:"8px", fill:0x000000, align:'center'});
 		text.position.x = 15;
-		text.position.y = y - 7;
-		//text.setStyle({font:"9px Arial", fill:"black"});
-		//text.cacheAsBitmap = true;
-		
-		counterY += 40;
+		text.position.y = y-6;
+		stage.addChild(text);
+		QF.setting.rulerText.push(text);
+		counterY += rOffset;
+	}
+	for (var x=-rOffset; x<canv.width; x+=rOffset){
+		var text = new PIXI.Text(x==0?"0":(x/QF.setting.unitVal).toFixed(2),{fontSize:"8px"});
+		text.position.x = x - 2 + rOffset;
+		text.position.y = 10;
 		stage.addChild(text);
 		QF.setting.rulerText.push(text);
 	}
-	
-	stage.addChild(rulerY);
-	stage.addChild(rulerBigY);
 }
 function initRulerX(){
 	rulerX = new PIXI.Graphics();
@@ -181,16 +194,6 @@ function initRulerX(){
 	for (var x=0; x<canv.width; x+=20){
 		rulerBigX.moveTo(x, 0);
 		rulerBigX.lineTo(x, 10);
-	}
-	
-	for (var x=0; x<canv.width; x+=40){
-		var text = new PIXI.Text(x,{fontSize:"9px"});
-		text.position.x = x - 2;
-		text.position.y = 15;
-		//text.setStyle({font:"9px Arial", fill:"black"});
-		//text.cacheAsBitmap = true;//Is it really improving performance??
-		stage.addChild(text);
-		QF.setting.rulerText.push(text);
 	}
 	
 	stage.addChild(rulerX);
@@ -243,7 +246,7 @@ function drawGrid(color){
 	gridG.beginFill(color);
 	
 	for(var x = -grid.distX; x < grid.width; x+=grid.distX){
-		for(var y = grid.height; y > -grid.distY; y-=grid.distY){
+		for(var y = grid.height-1; y > -grid.distY; y-=grid.distY){
 			//gridG.drawRect(x, y, cellSize, cellSize);
 			gridG.drawCircle(x, y, cellSize);
 		}
@@ -260,25 +263,27 @@ function animate() {
 }
 
 function mousePositionGui(newPosition) {
-	coord = toUserPoint(
+	//coord = toUserPoint(
+	coord = usrP.user(
 		newPosition.x, 
 		newPosition.y
 	);
-	QF.setting.mouseX=coord.x.toFixed(2);
-	QF.setting.mouseY=coord.y.toFixed(2);
+	QF.setting.mouseX=coord.x;
+	QF.setting.mouseY=coord.y;
 }
 
 function getMousePos(){
 	return renderer.plugins.interaction.mouse.global;
 }
 //User coordinate should start from bottom left
-var toUserPoint = function(x, y){
-	var usrP = cm.toUserPointY(canv.height);
-	var temp = coord;
+/*var toUserPoint = function(x, y){
+	//var usrP = cm.toUserPointY(canv.height);
+	/*var temp = coord;
 	temp.x = parseInt(x);
-	temp.y = usrP(y);
-	return temp;
-}
+	temp.y = usrP(x, y);
+	return temp;/
+	return usrP(x, y);;
+}*/
 //System coordinate start from top left
 var toSystemPoint = function(x, y){
 	var temp = coord;
@@ -292,7 +297,10 @@ initRenderer();
 initAxes();
 initRulerX();
 initRulerY();
-drawGrid("0x000000");
+initRulerText();
+//drawGrid("0x000000");
+drawGrid("0xb4bcc2");
+initSelectArea();
 initDomainLength();
 initLeftLim();
 initRightLim();

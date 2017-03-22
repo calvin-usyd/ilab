@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="http://ilab.quantumfi.net/">
+</head>
+
+<body>
+	<div class="col-lg-12">Project Name: <b id="projName" class="text-muted" data="{{@projNameSlug}}">{{@projName}}</b></div>
+	<div class="col-lg-12">
+		<div id="patrusRefreshGraphBtn" class="btn btn-primary">refresh graph</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-2 col-xs-2 btn-sm text-center"><span>Axial Force (N)</span><div id="heatmapTbl" style="width: 100%; color:#fff"></div></div>
+		<div class="col-lg-9 col-xs-9" id="canvas"></div>
+	</div>
+	<link rel="stylesheet" href="shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="shared/flatly/bootstrap.min.css">
+	
+	<script src="shared/jquery.js"></script>
+	<script src="shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="shared/lodash.min.js"></script>
+	<!--script src="shared/handsontable/handsontable.full.min.js"></script>
+	<script src="shared/conrec.js"></script>
+	<script src="shared/chroma.min.js"></script>
+	<script src="shared/plotly-latest.min.js"></script-->
+	
+	<script src="js/dat.gui.js"></script>
+	<script src="js/pixi.js/pixi-v4.min.js"></script>
+	<script src="js/all/heatmap.js"></script>
+	<script src="js/all/qf.js"></script>
+	<script src="js/all/qf.util.js"></script>
+	<script src="js/all/dot.js?{{@microtime}}"></script>
+	<script src="js/all/qf.common.js?{{@microtime}}"></script>
+	<script src="js/all/qf.mode.js?{{@microtime}}"></script>
+	<script src="js/all/qf.setting.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicFE.js?{{@microtime}}"></script>
+	<script src="js/all/qf.finiteElement.js?{{@microtime}}"></script>
+	<script src="js/all/qf.arrow.js?{{@microtime}}"></script>
+	<script src="js/all/qf.node.js?{{@microtime}}"></script>
+	<script src="js/all/qf.element.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PATRUS/qf.ppSetting.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PATRUS/qf.ppLogic.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PATRUS/qf.ppGuiCrtl.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PATRUS/qf.ppGuiClick.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PATRUS/main.js?{{@microtime}}"></script>
+	
+</body>
+</html>

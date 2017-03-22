@@ -1,8 +1,7 @@
 "use strict";
 
 QF.WuiCrtl = function(){
-	
-	$('#refreshList').bind('click', function(){
+	$('#refreshList').unbind("click").bind('click', function(){
 		getFileList();
 	});
 	
@@ -27,10 +26,9 @@ QF.WuiCrtl = function(){
 	
 	//PPP: Post Processor Particle
 	this.getPPPContent = function(fileName){
+		cm.loadProgress();		
 		$('.fileByTime.btn-primary').toggleClass('btn-default btn-primary');
-		
 		$('#'+fileName.replace('.', '')).toggleClass('btn-default btn-primary');
-		
 		$.ajax({
 			url: QF.setting.url + QF.setting.serv_pppData + pName.innerHTML + '/' + sName.innerHTML + '/' + fileName,
 			dataType: 'json',
@@ -39,7 +37,11 @@ QF.WuiCrtl = function(){
 	}
 	
 	function successGetPPPContent(jsonData){
-		
+		cm.hideProgress();	
+		if (jsonData[0] == 'Danger'){
+			alert(jsonData[1]);
+			return;
+		}
 		lg.importModel(jsonData['cP']);
 		
 		//lg.importKMB(jsonData['bP']);
@@ -78,7 +80,8 @@ QF.WuiCrtl = function(){
 		alert(dataJson[1]);
 	}
 	
-	function getFileList(){
+	this.getFileList = function(){
+		cm.loadProgress();
 		$.ajax({
 			url: QF.setting.url + QF.setting.serv_pppList + pName.innerHTML + '/' + sName.innerHTML,
 			dataType: 'json',
@@ -87,6 +90,11 @@ QF.WuiCrtl = function(){
 	}
 	
 	function successGetFileList(jsonData){
+		cm.hideProgress();
+		if (jsonData[0] == 'Danger'){
+			alert(jsonData[1]);
+			return;
+		}
 		var fileNameC = $('#ppplist');
 		fileNameC.empty();
 		
@@ -108,4 +116,4 @@ QF.WuiCrtl.prototype = new QF.WuiCrtl();
 QF.WuiCrtl.prototype.constructor = QF.WuiCrtl;
 
 //(new QF.WuiCrtl()).bindCrtl();
-var crtl = new QF.WuiCrtl();
+var crtl = new QF.WuiCrtl

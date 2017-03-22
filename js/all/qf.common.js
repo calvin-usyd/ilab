@@ -1,6 +1,7 @@
 "use strict";
 			
 QF.Common = function(){
+	var refreshIntervalId;
 return Object.freeze({
 	popUp : function(modalId){
 		$(modalId).modal().draggable({
@@ -72,13 +73,56 @@ return Object.freeze({
 			afterChange: afterChange
 		});
 	},
-	toUserPointY: function(canvH){//also used when convert to system y coordinate
-		return function(y){
-			return canvH-y;
+	toMapPoint: function(canvH, rOffset, ratio){
+		var system = function(x, y){//to pixel
+			return {
+				x:x * ratio + rOffset,
+				y:canvH  - rOffset - y * ratio 
+			};
 		}
+		var user = function(x, y){//to meter
+			return {
+				x:(x - rOffset) / ratio,
+				y:(canvH - y - rOffset) / ratio
+			};
+		}
+		return{system:system, user:user};
 	},
 	replaceAll: function(target, search, replacement) {
 		return target.replace(new RegExp(search, 'g'), replacement);
+	},
+	getJsonObj: function(json){
+		return (json instanceof Object) ? json : JSON.parse(json);
+	},
+	loadProgress: function(){
+		var $progressHolder;
+		if ($('body').has('#progressHolder').length == 1){
+			$progressHolder = $('#progressHolder');
+			$progressHolder.removeClass('hide');
+		}else{
+			$progressHolder = $('<div id="progressHolder">');
+			$progressHolder.prependTo($('body'));
+		}
+		$progressHolder.css({
+			height: $(document).height(),
+			'background-color': 'rgba(0, 0, 0, 0.38)',
+			'z-index': '1060',
+			position: 'absolute',
+			width: '100%'
+		});
+		$progressHolder.html('<div class="row"><p class="text-center pleaseWaitText" style="color:#fff">Please wait...!</p><div class="progress progress-striped active col-lg-6 col-lg-offset-3"><div class="progress-bar" style="width: 25%"></div></div></div>');
+		
+		var val=20;
+		refreshIntervalId = setInterval(function(){
+			$('.progress-bar').css('width', (val+=5)+"%");
+		}, 500);
+		console.log('load progress: '+refreshIntervalId);
+	},
+	hideProgress: function(){
+		console.log('hide progress: '+refreshIntervalId);
+		var $progressHolder = $('#progressHolder');
+		$progressHolder.addClass('hide');
+		clearInterval(refreshIntervalId);
 	}
 });
 }

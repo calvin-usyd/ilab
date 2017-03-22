@@ -167,18 +167,17 @@ QF.Logic = function(){
 		;
 		
 		for (var x=0; x<modelObjArray.length; x++){
-			//vertices = modelObjArray[x]['pointArray'];
 			vertices = modelObjArray[x];
-			
-			var shape = getShape(vertices);
-			
-			shape.draw(vertices, radius);
-			
-			stage.addChild(shape);
+			if (vertices.length != 0){
+				var shape = getShape(vertices);				
+				shape.draw(vertices, radius);				
+				stage.addChild(shape);
+			}
 		}
 	}
 	
 	function getShape(vertices){
+		console.log(vertices);
 		if (vertices.length/2 == 1){
 			//createCircle(vertices);
 			return new QF.Circle();

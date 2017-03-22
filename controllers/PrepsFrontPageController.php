@@ -2,13 +2,46 @@
 //require_once "PasswordHash.php";
 
 class PrepsFrontPageController extends PrepsController{
-	
 	function index($f3){
 		if ($f3->exists('SESSION.user') || $f3->get('SESSION.user') != ''){
 			$f3->reroute('/workspace');
 		}else{
 			$f3->set('inc', 'login.htm');
 		}
+		$privatekey ='';
+		/*WORKING - START
+		*/
+		/*$rsa = new Crypt_RSA();
+		$rsa->setPassword('fernandoilab2020');
+		$rsa->loadKey($privatekey);
+
+		$ssh = new Net_SSH2('115.146.94.238');
+		if (!$ssh->login('calvin', $rsa)) {
+			exit('Login Failed');
+		}*/
+		//WORKING - END
+
+		/*echo $ssh->read('/.*@.*[$|#]/', NET_SSH2_READ_REGEX);
+		$ssh->write("sudo -i\n");
+		echo $ssh->read('[prompt]');*/
+		//$ssh->setTimeout(1);
+		//$output = $ssh->read('/.*@.*[$|#]|.*[pP]assword.*/', NET_SSH2_READ_REGEX);
+		//if (preg_match('/.*[pP]assword.*/', $output)) {
+			//$ssh->write("C@lvin85\n");
+			//echo $ssh->read('/.*@.*[$|#]/', NET_SSH2_READ_REGEX);
+		//}
+		//$ssh->write("/var/www/html/ilab/data/template.exe /var/www/html/ilab/data/calvin/spoly\n");
+		//echo $ssh->exec('/var/www/html/ilab/data/template.exe /var/www/html/ilab/data/calvin/spoly');
+		//echo $ssh->exec('cd ../; pwd');
+		//echo $ssh->exec('cd /var/www/html/ilab/data; pwd; ./template.exe calvin/spoly');
+		//echo $ssh->exec('pwd');
+		//echo $ssh->exec('cd solver');
+		//echo $ssh->exec('ls');
+		//echo $ssh->exec('pwd');
+		
+		//WORKING : //echo $ssh->exec('solver/template.exe solver/calvin/spoly');
+		
+		//echo $ssh->exec('./template.exe calvin/spoly');
 	}
 	
 	private function validateLogin($f3){

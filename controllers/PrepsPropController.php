@@ -8,7 +8,8 @@ class PrepsPropController extends PrepsController
     }
  
 	public function listProp($f3){
-		$prop = $this->prop->all();
+		//$prop = $this->prop->all();
+		$prop = $this->prop->getById('username', $f3->get('SESSION.user'));
 		
 		function getAllProperties($prop){
 			return array("propLongId"=>$prop['propLongId'], "type"=>$prop['elementType'], "prop"=>$prop['properties']);
@@ -53,6 +54,7 @@ class PrepsPropController extends PrepsController
 				$f3->set('POST.propLongId', $this->genLongId());
 				$f3->set('POST.elementType', $key);
 				$f3->set('POST.properties', json_encode($val));
+				$f3->set('POST.username', $f3->get('SESSION.user'));
 				$this->prop->add();
 				$this->prop->reset();
 			}
@@ -78,6 +80,7 @@ class PrepsPropController extends PrepsController
 		foreach($postData as $val){
 			$f3->set('POST.elementType', $val['type']);
 			$f3->set('POST.properties', json_encode($val['property']));
+			$f3->set('POST.username', $f3->get('SESSION.user'));
 			
 			$this->prop->getById('propLongId', $val['propLongId']);
 			

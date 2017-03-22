@@ -35,6 +35,7 @@ var mapProp = function(o){
 	return {
 		propLongId:o.propLongId, 			name:prop.name,						type:o.type, 	pType:prop.type, 
 		youngModulus:prop.youngModulus, 	poissonRatio:prop.poissonRatio, 	area:prop.area, 
+		temp:prop.temp, 					LOF:prop.LOF, 						alpha:prop.alpha, ro:prop.ro,
 		moment:prop.moment, 				thickness:prop.thickness, 			delete:false
 	};
 }
@@ -234,6 +235,37 @@ this.loadConsList = function(json){
 	
 	QF.setting.hotConsNode.loadData(QF.setting.dataConsNode);
 	QF.setting.hotConsParticle.loadData(QF.setting.dataConsParticle);
+	
+	_.forEach(QF.setting.nodeObjArray, function(nodeO){
+		_.forEach(QF.setting.dataConsNode, function(consO){
+			if(nodeO.o.constraint == consO.name){
+				//REMOVE EXISTING CHILDREN
+				console.log(nodeO.o.children);
+				var childrenToKeep = [];
+				_.forEach(nodeO.o.children, function(childO){
+					if(childO.name == 'consText'){
+						QF.setting.bcTextArray = _.filter(QF.setting.bcTextArray, childO);
+						
+					}else if (childO.name == 'loadText'){
+						QF.setting.loadTextArray = _.filter(QF.setting.loadTextArray, childO);
+						
+					}else if (childO instanceof QF.Arrow){
+						QF.setting.arrowTextArray = _.filter(QF.setting.arrowTextArray, childO);
+						
+					}else{
+						childrenToKeep.push(childO);
+					}
+				});
+				nodeO.o.removeChildren();
+				_.forEach(childrenToKeep, function(childO){
+					nodeO.o.addChild(childO);
+				});
+			}
+		});
+	});
+	_.forEach(QF.setting.nodeObjArray, function(nodeO){
+		nodeO.o.refreshConstraint(nodeO.o.constraint);
+	});
 }
 this.loadSpasCons = function(){
 	if (typeof QF.setting.dataConsSpasIC == 'undefined' ){
@@ -485,36 +517,112 @@ this.copyIncrement = function(count, row, distant){
 this.deleteObj = function(){
 	console.log(QF.setting.selectedObj);
 	console.log(QF.setting.selectedObj.length);
-	if (confirm("Are you sure to delete selected object?")){
-		_.forEach(QF.setting.selectedObj, function(o){stage.removeChild(o.obj);});
-		
+	if (QF.setting.selectedObj.length == 0) {
+		alert('No objects were selected.');
+	
+	}else if (confirm("Are you sure to delete selected object?")){
+		_.forEach(QF.setting.selectedObj, function(o){
+			lg.removeObjByType(o.obj, false);
+		});		
 		QF.setting.selectedObj = [];
 	}
 }
 this.delSelected = function(){
-	
+}
+this.scaleUp = function(){
+	stage.scale.x+=0.2;	
+	stage.scale.y+=0.2;	
+}
+this.scaleDown = function(){
+	stage.scale.x-=0.2;
+	stage.scale.y-=0.2;
+}
+this.moveUp = function(){
+	stage.y+=10;
+}
+this.moveDown = function(){
+	stage.y-=10;
+}
+this.moveRight = function(){
+	stage.x-=10;
+}
+this.moveLeft = function(){
+	stage.x+=10;
 }
 this.undo = function(){
 	var o = QF.setting.undoArray[QF.setting.undoArray.length-1];
-	//console.log(o);
+	lg.removeObjByType(o, true);
+	QF.setting.undoArray = _.dropRight(QF.setting.undoArray);
+}
+this.removeObjByType = function(o, isInOrder){
 	stage.removeChild(o);
 	
 	if (o instanceof Polygon){
-		var pointArray = o.currentPath.shape.points;
-		QF.setting.verticesNoTextArray = _.dropRight(QF.setting.verticesNoTextArray, pointArray.length / 2);
-		
+		if (isInOrder){
+			var pointArray = o.currentPath.shape.points;
+			QF.setting.verticesNoTextArray = _.dropRight(QF.setting.verticesNoTextArray, pointArray.length / 2);
+		}else{
+			QF.setting.verticesNoTextArray = _.filter(QF.setting.verticesNoTextArray, function(verticeObj){
+				return verticeObj.parent !== o;
+			});
+		}		
 	}
 	if (o instanceof Circle || o instanceof Polygon){
-		QF.setting.deObjArray = _.dropRight(QF.setting.deObjArray);
-		QF.setting.particleNoTextArray = _.dropRight(QF.setting.particleNoTextArray);
-		
+		if (isInOrder){
+			QF.setting.deObjArray = _.dropRight(QF.setting.deObjArray);
+			QF.setting.particleNoTextArray = _.dropRight(QF.setting.particleNoTextArray);
+		}else{
+			QF.setting.particleNoTextArray = _.filter(QF.setting.particleNoTextArray, function(textObj){
+				return textObj.parent!==o;
+			});
+			_.pull(QF.setting.deObjArray, o);
+		}
 	}else if (o instanceof QF.Element){
-		QF.setting.elementIndexArray = _.dropRight(QF.setting.elementIndexArray);
+		if (isInOrder){
+			QF.setting.elementIndexArray = _.dropRight(QF.setting.elementIndexArray);
+			QF.setting.elementNoTextArray = _.dropRight(QF.setting.elementNoTextArray);
+		}else{
+			QF.setting.elementIndexArray = _.filter(QF.setting.elementIndexArray, function(elemObj){
+				return elemObj.elem!==o;
+			});
+			QF.setting.elementNoTextArray = _.filter(QF.setting.elementNoTextArray, function(textObj){
+				return textObj.parent!==o;
+			});
+		}
 		
 	}else if (o instanceof QF.Node){
-		QF.setting.nodeObjArray = _.dropRight(QF.setting.nodeObjArray);
-	}
-	QF.setting.undoArray = _.dropRight(QF.setting.undoArray);
+		if (isInOrder){
+			QF.setting.nodeObjArray = _.dropRight(QF.setting.nodeObjArray);
+			QF.setting.nodeNoTextArray = _.dropRight(QF.setting.nodeNoTextArray);
+		}else{
+			var ind=-1;
+			var nodeArr=[];
+			QF.setting.nodeNoTextArray = _.filter(QF.setting.nodeNoTextArray, function(nodeTextObj){
+				return nodeTextObj == o.children[0];
+			});
+			QF.setting.nodeObjArray = _.filter(QF.setting.nodeObjArray, function(nodeObj, nodeInd){
+				if (nodeObj.o===o){
+					ind = o.children[0].text;//4, 2
+					return false;
+				}
+				return true;
+			});
+				console.log(ind);
+			QF.setting.elementIndexArray = _.filter(QF.setting.elementIndexArray, function(elemObj, particleInd){
+				nodeArr = elemObj.nodes;
+				console.log(nodeArr);
+				nodeArr = _.filter(nodeArr, function(nodeInd){
+					return nodeInd == parseInt(ind);
+				});
+				console.log(nodeArr);
+				if (nodeArr.length > 0){
+					stage.removeChild(elemObj.elem);
+					return false;					
+				};
+				return true;
+			});
+		}
+	}	
 }
 this.moveSelected = function(x, y){
 	polygon.position = {x:20, y:20};
