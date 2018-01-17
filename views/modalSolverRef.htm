@@ -1,0 +1,196 @@
+<div class="modal fade" id="modalSolverRef" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">		
+		<h2>Solver References</h2>
+	  </div>
+	  <div class="modal-body">
+		<table class="table table-striped table-hover ">
+		  <thead>
+			<tr>
+			  <th>#</th>
+			  <th>Solver</th>
+			  <th>Description</th>
+			  <th>Requirement</th>
+			  <th>Output</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<tr>
+			  <td>1</td>
+			  <td>SPOLY</td>
+			  <td class="col-lg-4">
+			    Program SPOLY to analyse the contact network, forces and fabric of the particle-pile system as well as particle velocities.
+				<img src="/img/spoly-particles.jpg" class="img-responsive thumbnail"/>
+			  </td>
+			  <td>
+			  <div class="row">
+			   <div class="col-lg-6">
+			    <b>Particle:</b><br>
+			    1. Mark (0=big, 1=small)<br>
+				2. radius of the spheropolyhedra<br>
+				3. Vertices' coordinate <br>
+				4. Velocity and force for X, Y, Phi.<br>
+			   </div>
+			   <div class="col-lg-6">
+			    <b>Parameters:</b><br>
+				1. Normal contact stiffness, k_n: g/cm^2<br>
+				2. Tangential contact stiffness, k_t: g/cm^2<br>
+				3. Coefficient of friction, m_u<br>
+				4. Coefficient of rolling friction, m_ur<br>
+				5. Normal coefficient of viscosity, gamma_n: 1/s<br>
+				6. Tangential coefficient of viscosity, gamma_t: 1/s<br>
+				7. Coefficient of viscosity, gamma_n: 1/s<br>
+				8. Gravity, g: cm/s^2<br>
+				9. Angle of inclination of gravity, beta: degrees<br>
+				10. Verlet distance, alpha: cm<br>
+				11. Time step, d_t: s<br>
+				12. Density, rho: g/cm^2<br>
+				13. viscoelastic Contact Model<br>
+			   </div>
+			   </div>
+			  </td>
+			  <td>
+			  </td>
+			</tr>
+			<tr>
+			  <td>2</td>
+			  <td>CONFEM</td>
+			  <td>Program CONFEM for the solution of water flow and single-species chemical contamination (ie solute transport) in soils.
+				<img src="/img/confem-solute-transport.jpg" class="img-responsive thumbnail"/>
+			  </td>
+			  <td>
+			  <div class="row">
+			   <div class="col-lg-6">
+				  <b>Element:</b><br>
+				  1. Type of Boundary condition<br>
+				  2. Thickness<br>
+				  3. Mesh Subdivision & ratio<br>
+				  4. Element type<br>
+			   </div>
+			   <div class="col-lg-6">
+				  <b>Analysis:</b><br>
+				  1. Water flow or solute transport<br>
+				  2. saturated and unsaturated soil<br>
+				  3. 28 variants of the flow equation, reactive diffusion-advection equation and Richards equation.<br>
+				  4. coupled hydro-chemical problems<br>
+				  5. steady-state<br>
+				  6. time-dependent conditions.<br>
+				  
+			   </div>
+			  </div>
+			  </td>
+			  <td>
+			  </td>
+			</tr>
+			<tr>
+			  <td>3</td>
+			  <td>PATRUS</td>
+			  <td>
+			    Program PATRUS for the solution of plane truss including loading through nodal forces, self weight, temperature effects and initial lack of fit
+				<img src="/img/plane-truss-element.jpg" class="img-responsive thumbnail"/>
+			  </td>
+			  <td>
+			  <div class="row">
+			   <div class="col-lg-6">
+				  <b>Node:</b><br>
+				  1. Coordinate X, Y <br>
+				  2. Degree of Freedom X, Y<br>
+				  <hr>
+				  3. Force X, Y<br><br>
+				   </div>
+				   <div class="col-lg-6">
+				  <b>Element:</b><br>
+				  1. Two connected nodes I,J<br>
+				  2. Area<br>
+				  3. Young Modulus<br>
+				  4. Temperature<br>
+				  5. Lack of Fit<br>
+				  6. Themal Expansion<br>
+				  7. Weight/unit length<br>
+				</div>
+			  </div>
+			  </td>
+			  <td>
+			  1. Nodal displacements X, y <br>
+			  2. Member force (TENSION POSITIVE) <br>
+			  3. Nodal forces X, Y<br>
+			  </td>
+			</tr>
+			<tr>
+			  <td>4</td>
+			  <td>PAISOP</td>
+			  <td>
+			    Program PAISOP to solve thin shell problems using mindlin 8-node isoparametric elements
+				<img src="/img/isoparametric-element.jpg" class="img-responsive thumbnail"/>
+			  </td>
+			  <td>
+			  <div class="row">
+			   <div class="col-lg-6">
+				  <b>Node:</b><br>
+				  1. Coordinate X, Y, Z<br>
+				  2. Translational Degree of Freedom X, Y, Z<br>
+				  3. Rotational Degree of Freedom X, Y, Z<br>
+				  <hr>
+				  4. Force X, Y, Z<br><br>
+			   </div>
+			   <div class="col-lg-6">
+				  <b>Element:</b><br>
+				  1. Eight connected nodes I,J, K, L, M, N, O, P<br>
+				  2. Thickness<br>
+				  3. Young Modulus<br>
+				  4. Poisson<br>
+				  5. Press X, Y, Z<br>
+				</div>
+			  </div>
+			  </td>
+			  <td>
+				1. Nodal displacements and rotations<br>
+				2. Stress resultants - forces and moments per unit width<br>
+				ELMT, GAUSS POINTS, NXX, NYY, NXY<br>
+			  </td>
+			</tr>
+			<tr>
+			  <td>5</td>
+			  <td>PAFRAM</td>
+			  <td>
+				Program PAFRAM for the solution of <a href="//www.nptel.ac.in/courses/Webcourse-contents/IIT%20Kharagpur/Structural%20Analysis/pdf/m4l30.pdf" target="_blank">plane frame</a> including loading through nodal forces, udl, temperature effects and initial lack of fit
+				<img src="/img/plane-frame-element.jpg" class="img-responsive thumbnail"/>
+			  </td>
+			  <td>
+			  <div class="row">
+			   <div class="col-lg-6">
+				  <b>Node:</b><br>
+				  1. Coordinate X, Y <br>
+				  2. Degree of Freedom X, Y, Theta<br>
+				  <hr>
+				  3. Force X, Y, moment<br><br>
+				   </div>
+				   <div class="col-lg-6">
+				  <b>Element:</b><br>
+				  1. Two connected nodes I,J<br>
+				  2. Area<br>
+				  3. Inertia<br>
+				  4. Young Modulus<br>
+				  5. Temperature<br>
+				  6. Lack of Fit<br>
+				  7. Themal Expansion<br>
+				  8. Uniformly Distributed Load<br>
+				  9. Hinge at I and/or J (1,0  0,1  OR 1,1)<br>
+				</div>
+			  </div>
+			  </td>
+			  <td>
+			  1. Nodal displacements X, Y, and rotation<br>
+			  2. Member tension Shear A, B and Force A, B<br>
+			  </td>
+			</tr>
+		  </tbody>
+	    </table>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	  </div>
+	</div>
+  </div>
+</div>

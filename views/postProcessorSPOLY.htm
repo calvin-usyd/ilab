@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>PREPS Result</title>
+		<base href="{{@appPath}}">
+		<!--link rel="stylesheet" href="shared/jquery-ui-1.11.4/jquery-ui.min.css"-->
+		<!--link rel="stylesheet" href="shared/jquery-ui-1.11.4/jquery-ui.theme.cupertino.min.css"-->
+        <link rel="stylesheet" href='shared/bootstrap/css/bootstrap.min.css'>
+		<link rel="stylesheet" href="views/css/main.css">
+    </head>
+    <body>
+		<div class="container">
+			<div class="text-center row">
+				<h1 class="">PREPS Result</h1><br/>
+				<span class="col-lg-121"><label>Project : </label><span id="pName">{{@project}}</span></span>,&nbsp;&nbsp;&nbsp;
+				<span class="col-lg-121"><label>Simulation : </label><span id="sName">{{@simulation}}</span></span>
+			</div>
+			<div class="row">
+				<div class="col-lg-offset-2">
+					<span class="btn btn-warning" id="refreshList"><span class="glyphicon glyphicon-refresh"></span> Refresh</span>
+					<div class="btn btn-success" id="exportProject"><span class="glyphicon glyphicon-new-window"></span> Export to New Project</div>
+					<label>
+						<input type="checkbox" name="toggleKinetic" checked> Toggle Kinetic
+					</label>
+					<label>
+						<input type="checkbox" name="toggleMicroContact" checked> Toggle Micro Contact
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="btn btn-default fileByTime col-lg-12 hide" id="dummyFileElem">particle.001</div>
+				<div class="col-lg-2 list-group well" id="ppplist" ></div>
+				<output class="col-lg-10" id="canvasHolder">
+					<div><canvas id="canvasPPP" width="1200" height="600"></canvas></div>
+				</output>
+			</div>
+		</div>
+		
+		<script src="shared/jquery.js"></script>
+		<script src="shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+		<!--script src="shared/bootstrap/js/bootstrap.min.js"></script-->
+		<script src="js/dat.gui.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.2.2/pixi.min.js"></script>
+		<!--script src="js/pixi.js/pixi-v2.js"></script-->
+		<script src="js/all/qf.js"></script>
+		<script src="js/all/qf.util.js"></script>
+		<script src="js/all/qf.common.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.setting.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.display.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.shape.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.shapePolygon.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.shapeCircle.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.Logic.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.WuiCrtl.js?{{@microtime}}"></script>
+		<script src="js/postprocessor/SPOLY/qf.main.js?{{@microtime}}"></script>
+		<script>
+		</script>
+    </body>
+</html>
+<style>
+canvas {border: 1px solid #B5ABAB;}
+#ppplist {height:700px;overflow: scroll;}
+</style>
+<div id="dialogExport" title="Export to New Project" class="showNone row">
+	<form class="form-horizontal col-lg-12">
+		<fieldset>
+			<legend>Export As</legend>
+			<div class="form-group">
+				<label class="col-lg-4 control-label">Project:</label>
+				<div class="col-lg-8">
+					<input type="text" id="newPName" class="form-control" />
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>

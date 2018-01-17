@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="{{@appPath}}">
+</head>
+
+<body>
+	<div class="col-lg-12 small text-muted">
+		Hi <b id="user" class="text-capitalize" data="{{@SESSION.user}}">{{@SESSION.user}}.</b> &nbsp;
+		Project Name: <b id="projName" class="text-success text-capitalize" data="{{@projNameSlug}}">{{@projName}}</b>
+	</div>
+	<!--div class="col-lg-12">
+		<div id="patrusRefreshGraphBtn" class="btn btn-primary">refresh graph</div>
+	</div-->
+	<!--div class="row">
+		<div class="col-lg-1 col-xs-1 btn-sm text-center"><small> Axial Force (N)</small><div id="heatmapTbl" style="width: 100%; color:#fff"></div></div>
+		<div class="col-lg-9 col-xs-9" id="canvas"></div>
+	</div-->
+	<div class="row">
+		<div class="col-lg-2 col-xs-1 btn-sm text-center">
+			<div class="hide" id="axialHeatmapRef">
+				<small> Stress Force (N)</small>
+				<div id="stressXHeatmap" style="color:white"></div>
+				<div id="stressYHeatmap" style="color:white"></div>
+				<div id="stressXYHeatmap" style="color:white"></div>
+			</div>
+			<div class="hide" id="shearHeatmapRef">
+				<small> Shear Force (N)</small>
+				<div id="shearHeatmap" style="color:white"></div>
+			</div>
+			<div class="hide" id="momentHeatmapRef">
+				<small> Moment Bending (N)</small>
+				<div id="momentXHeatmap" style="color:white"></div>
+				<div id="momentYHeatmap" style="color:white"></div>
+				<div id="momentXYHeatmap" style="color:white"></div>
+			</div>
+		</div>
+		<div class="col-lg-9 col-xs-9" id="canvas"></div>
+	</div>
+	<link rel="stylesheet" href="shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="shared/flatly/bootstrap.min.css">
+	<link rel="stylesheet" href="views/css/main.css">
+	
+	<script src="shared/jquery.js"></script>
+	<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="shared/lodash.min.js"></script>
+	<script src="http://quantumfi.com.au/shared/three.min.js"></script>
+	<script src="http://quantumfi.com.au/shared/qf.common.js"></script>
+	
+	<script src="js/dat.gui.js"></script>
+	<script src="js/all/heatmap.js"></script>
+	<script src="js/postprocessor/PA/qf.ppUtil.js"></script>
+	<script src="js/postprocessor/PA/qf.ppSetting.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppLogicPAISOP.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppGuiCrtlPAISOP.js?{{@microtime}}"></script>
+</body>
+</html>

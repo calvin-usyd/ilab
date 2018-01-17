@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title id="htmlTitle">*New Project | iLab</title>
+	<!--base href="/ilab/"/-->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta id="usernameId" content="{{@SESSION.user}}">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<base href="{{@appPath}}"/>
+	<link rel="shortcut icon" href="views/css/img/cow.jpg">
+</head>
+<body>
+	<div id="useExternalServer" data="{{@useExternalServer}}"></div>
+	<div id="solver_local_SPOLY" data="{{@solver_local_spoly}}"></div>
+	<div id="solver_local_PATRUS" data="{{@solver_local_patrus}}"></div>
+	<div id="solver_local_CONFEM" data="{{@solver_local_confem}}"></div>
+	<div id="solveResult" title="Solve Result" class="showNone"><div></div></div>
+	
+	<!--link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="//bootswatch.com/flatly/bootstrap.min.css">
+	<link rel="stylesheet" href="//handsontable.com/dist/handsontable.full.css" media="screen">
+	<link rel="stylesheet" href="js/FM/main.css">
+	<script src="//quantumfi.com.au/shared/jquery.js"></script>
+	<script src="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="//quantumfi.com.au/shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="//quantumfi.com.au/shared/lodash.min.js"></script>
+	<script src="//quantumfi.com.au/shared/ZeroClipboard.min.js"></script>
+	<script src="//handsontable.com/dist/handsontable.full.min.js"></script><!--script src="//quantumfi.com.au/shared/handsontable.full.min.js"></script-->
+	<!--script src="shared/ZeroClipboard.min.js"></script--><!--Not neccessary anymore for handsontable copy paste -->
+	<!--script src="shared/handsontable/handsontable.full.min.js"></script-->
+	<!--script src="js/stats.min.js"></script-->
+	<!--script src="js/pixi.js/pixi-v4.min.js"></script-->
+	<!--script src="js/all/qf.js"></script-->
+	<!--link rel="stylesheet" href="//quantumfi.com.au/shared/handsontable.full.0.34.5.css" media="screen"-->
+	<script src="//quantumfi.com.au/shared/handsontable.full.min.0.34.5.js"></script>
+	
+	<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="//quantumfi.com.au/shared/bootstrap/css/bootstrap.flatly.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.35.0/handsontable.min.css" media="screen">
+	<link rel="stylesheet" href="views/css/main.css">
+	<script src="//quantumfi.com.au/shared/jquery.js"></script>
+	<script src="//quantumfi.com.au/shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="//quantumfi.com.au/shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="//quantumfi.com.au/shared/lodash.min.js"></script>
+	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.35.0/handsontable.min.js"></script-->
+	<script src="//quantumfi.com.au/shared/qf.common.js?{{@microtime}}"></script>
+	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.2.2/pixi.min.js"></script-->
+	
+	<script>
+		/*QFUtil.loadjscssfile('js/qf.display.js','js');
+		QFUtil.loadjscssfile('js/qf.sprite.js','js');
+		QFUtil.loadjscssfile('js/circle.js','js');
+		QFUtil.loadjscssfile('js/polygon.js','js');
+		QFUtil.loadjscssfile('js/all/dot.js','js');
+		QFUtil.loadjscssfile('js/all/qf.common.js','js');
+		QFUtil.loadjscssfile('js/all/qf.setting.js','js');
+		QFUtil.loadjscssfile('js/all/qf.mode.js','js');
+		QFUtil.loadjscssfile('js/all/qf.Logic.js','js');
+		QFUtil.loadjscssfile('js/FM/qf.LogicSelect.js','js');
+		QFUtil.loadjscssfile('js/all/main.js','js');
+		QFUtil.loadjscssfile('js/all/qf.finiteElement.js','js');
+		QFUtil.loadjscssfile('js/all/qf.node.js','js');
+		QFUtil.loadjscssfile('js/all/qf.element.js','js');
+		QFUtil.loadjscssfile('js/all/qf.guiClick.js','js');
+		QFUtil.loadjscssfile('js/all/qf.keyEvent.js','js');
+		QFUtil.loadjscssfile('js/all/excelData.js','js');
+		QFUtil.loadjscssfile('js/all/qf.guiCrtl.js','js');*/
+	</script>
+	
+	<script src="js/pixi.js/pixi-v4.6.2.min.js"></script>
+	<script src="js/dat.gui.js"></script>
+	<script src="js/all/qf.util.js?{{@microtime}}"></script>
+	<script src="js/all/qf.display.js?{{@microtime}}"></script>
+	<script src="js/all/qf.sprite.js?{{@microtime}}"></script>
+	<script src="js/all/circle.js?{{@microtime}}"></script>
+	<script src="js/all/polygon.js?{{@microtime}}"></script>
+	<script src="js/all/dot.js?{{@microtime}}"></script>
+	<script src="js/all/qf.setting.js?{{@microtime}}"></script>
+	<script src="js/all/qf.mode.js?{{@microtime}}"></script>
+	<script src="js/all/qf.Logic.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicDE.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicFE.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicProject.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicEditor.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicValidation.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicSelect.js?{{@microtime}}"></script>
+	<script src="js/all/qf.finiteElement.js?{{@microtime}}"></script>
+	<script src="js/all/qf.arrow.js?{{@microtime}}"></script>
+	<script src="js/all/qf.node.js?{{@microtime}}"></script>
+	<script src="js/all/qf.element.js?{{@microtime}}"></script>
+	<script src="js/all/qf.guiClick.js?{{@microtime}}"></script>
+	<script src="js/all/qf.keyEvent.js?{{@microtime}}"></script>
+	<script src="js/all/qf.guiCrtl.js?{{@microtime}}"></script>
+	<script src="js/all/excelData.js?{{@microtime}}"></script>
+	<script src="js/all/main.js?{{@microtime}}"></script>
+	<div class="col-lg-12 text-muted small">
+		Hi <b id="user" class="text-capitalize" data="{{@SESSION.user}}">{{@SESSION.user}}.</b> &nbsp;
+		Project Name: <b id="projName" class="text-capitalize text-success"></b>
+	</div>
+	<div id="overlayProgress" class=""></div>
+	<include href="modalFiles.htm"/>
+	<include href="modalSolverRef.htm"/>
+	<include href="modalSolverSpoly.htm"/>
+	<include href="modalSolver.htm"/>
+	<include href="modalSolverSpas.htm"/>
+	<include href="modalSaveProject.htm"/>
+	<include href="modalSelectProject.htm"/>
+	<include href="modalImage.htm"/>
+	<include href="modalCopy.htm"/>
+	<include href="modalSetAttrDE.htm"/>
+	<include href="modalCustomElemCons.htm"/>
+	<include href="modalCustomElemProp.htm"/>
+	<include href="modalElemCons.htm"/>
+	<include href="modalElemProp.htm"/>
+	<!--include href="modalNodesAttr.htm"/-->
+	<include href="modalEditor.htm"/>
+	<include href="modalSubdivide.htm"/>
+	<include href="modalExtrude.htm"/>
+	<include href="modalProfile.htm"/>
+	<include href="modalSession.htm"/>
+</body>
+</html>

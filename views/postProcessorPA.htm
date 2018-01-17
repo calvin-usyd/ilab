@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="{{@appPath}}">
+</head>
+
+<body>
+	<div class="col-lg-12 small text-muted">
+		<b id="solver" class="text-capitalize" data="{{@solver}}"></b>
+		Hi <b id="user" class="text-capitalize" data="{{@SESSION.user}}">{{@SESSION.user}}.</b> &nbsp;
+		Project Name: <b id="projName" class="text-success text-capitalize" data="{{@projNameSlug}}">{{@projName}}</b>
+	</div>
+	<!--div class="col-lg-12">
+		<div id="patrusRefreshGraphBtn" class="btn btn-primary">refresh graph</div>
+	</div-->
+	<div class="row">
+		<div class="col-lg-2 col-xs-1 btn-sm text-center">
+			<div class="hide" id="axialHeatmapRef">
+				<small> Axial Force (N)</small>
+				<div id="axialHeatmap" style="color:white"></div>
+			</div>
+			<div class="hide" id="shearHeatmapRef">
+				<small> Shear Force (N)</small>
+				<div id="shearHeatmap" style="color:white"></div>
+			</div>
+			<div class="hide" id="momentHeatmapRef">
+				<small> Moment Bending (N)</small>
+				<div id="momentHeatmap" style="color:white"></div>
+			</div>
+		</div>
+		<div class="col-lg-9 col-xs-9" id="canvas"></div>
+	</div>
+	<link rel="stylesheet" href="shared/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="shared/flatly/bootstrap.min.css">
+	<link rel="stylesheet" href="shared/handsontable/handsontable.full.css" media="screen">
+	<link rel="stylesheet" href="views/css/main.css">
+	
+	<script src="shared/jquery.js"></script>
+	<script src="shared/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+	<script src="shared/lodash.min.js"></script>
+	<script src="shared/handsontable/handsontable.full.min.js"></script>
+	<!--script src="shared/conrec.js"></script>
+	<script src="shared/chroma.min.js"></script>
+	<script src="shared/plotly-latest.min.js"></script-->
+	
+	<script src="js/dat.gui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.2.2/pixi.min.js"></script>
+	<!--script src="js/pixi.js/pixi-v4.min.js"></script-->
+	<script src="js/all/heatmap.js"></script>
+	<script src="js/all/dot.js?{{@microtime}}"></script>
+	<script src="//quantumfi.com.au/shared/qf.common.js?{{@microtime}}"></script>
+	<script src="js/all/qf.util.js?{{@microtime}}"></script>
+	<script src="js/all/qf.mode.js?{{@microtime}}"></script>
+	<script src="js/all/qf.setting.js?{{@microtime}}"></script>
+	<script src="js/all/qf.Logic.js?{{@microtime}}"></script>
+	<script src="js/all/qf.LogicFE.js?{{@microtime}}"></script>
+	<script src="js/all/qf.finiteElement.js?{{@microtime}}"></script>
+	<script src="js/all/qf.arrow.js?{{@microtime}}"></script>
+	<script src="js/all/qf.node.js?{{@microtime}}"></script>
+	<script src="js/all/qf.element.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppUtil.js"></script>
+	<!--script src="js/postprocessor/PA/ppExcelData.js?{{@microtime}}"></script-->
+	<script src="js/postprocessor/PA/qf.Symbol.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppSetting.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppLogicCommon.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppLogic{{@solver}}.js?{{@microtime}}"></script>
+	<script src="js/postprocessor/PA/qf.ppGuiCrtl{{@solver}}.js?{{@microtime}}"></script>
+	<!--script src="js/postprocessor/PA/qf.ppGuiClick.js?{{@microtime}}"></script-->
+	<script src="js/postprocessor/PA/main.js?{{@microtime}}"></script>
+	<!--include href="postModalPA.htm"/-->
+</body>
+</html>

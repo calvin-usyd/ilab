@@ -1,0 +1,40 @@
+<div class="modal fade" id="postModalPA" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{{@solver}} Data</h4>
+	  </div>
+	  <div class="modal-body">
+	  <!--div class="row">
+		  <div class="col-lg-4"><div id="hotNodesForce"></div></div>
+		  <div class="col-lg-4"><div id="hotElemForce"></div></div>
+		  <div class="col-lg-4"><div id="hotDisplacement"></div></div>
+	  </div-->
+	  <ul class="nav nav-tabs">
+		  <li class="active"><a href="#nodesForce" data-toggle="tab">Nodes Force</a></li>
+		  <li><a href="#elemForce" data-toggle="tab">Elements Force</a></li>
+		  <li><a href="#elemCons" data-toggle="tab">Elements Constraint</a></li>
+		  <li><a href="#displacement" data-toggle="tab">Displacement</a></li>
+	  </ul>
+	  <div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade active in" id="nodesForce">
+			<div id="hotNodesForce"></div>
+		</div>
+		<div class="tab-pane fade in" id="elemForce">
+			<div id="hotElemForce"></div>
+		</div>
+		<div class="tab-pane fade in" id="elemCons">
+			<div id="hotElemCons"></div>
+		</div>
+		<div class="tab-pane fade in" id="displacement">
+			<div id="hotDisplacement"></div>
+		</div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	  </div>
+	</div>
+  </div>
+</div>
+</div>

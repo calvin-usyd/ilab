@@ -1,0 +1,143 @@
+<div class="modal fade" id="modalCustomConsNode" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h4 class="modal-title">Custom Node Constraint</h4>
+	  </div>
+	  <div class="modal-body">
+		<form class="row form-horizontal">
+			<fieldset class="col-lg-6">
+			  <div class="col-lg-12 well">
+				<div class="form-group-">
+					<label class="col-lg-3 control-label  text-right">Name/Identifier:</label>
+					<div class="col-lg-9">
+						<input type="text" class="hide" name="index"/>
+						<input type="text" class="form-control" name="name" value="Custom" disabled />
+					</div>
+				</div>
+			  </div>
+			  <div class="col-lg-12 well">
+				<legend>Boundary Condition</legend>
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Translational x:</label>
+						<div class="col-lg-6 inputH">
+							<select name="tx" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Translational y:</label>
+						<div class="col-lg-6 inputH">
+							<!--input type="number" name="ty" class="form-control" value="0"/-->
+							<select name="ty" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Translational z/&Theta;:</label>
+						<div class="col-lg-6 inputH">
+							<!--input type="number" name="tz" class="form-control" value="0"/-->
+							<select name="tz" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Rotational x:</label>
+						<div class="col-lg-6 inputH">
+							<!--input type="number" name="rx" class="form-control" value="0"/-->
+							<select name="rx" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Rotational y:</label>
+						<div class="col-lg-6 inputH">
+							<!--input type="number" name="ry" class="form-control" value="0"/-->
+							<select name="ry" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-6 control-label">Rotational z:</label>
+						<div class="col-lg-6 inputH">
+							<!--input type="number" name="rz" class="form-control" value="0"/-->
+							<select name="rz" class="form-control"/>
+							  <option value="0">0</option>
+							  <option value="1">1</option>
+							</select>
+						</div>
+					</div>
+				 </div>
+			  </div>
+			</fieldset>
+			<fieldset class="col-lg-6">
+			  <div class="row">
+				  <div class="col-lg-6">
+					  <div class="well">
+						<legend>Temperature</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Celcius:</label>
+						  <div class="col-lg-9">
+							<input type="text" class="form-control" name="temperature" value="0"/>
+						  </div>
+						</div>
+					  </div>
+				  </div>
+				  <div class="col-lg-6">
+					  <div class="well">
+						<legend>Moment</legend>
+						<div class="form-group">
+						  <label class="col-lg-3 control-label">Meters:</label>
+						  <div class="col-lg-9">
+							<input type="text" class="form-control" name="moment" value="0"/>
+						  </div>
+						</div>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="col-lg-12 well">
+				<legend>Load/Force</legend>
+				<div class="row">
+					<div class="form-group col-lg-4">
+					  <label class="col-lg-3 control-label">P:</label>
+					  <div class="col-lg-9">
+						<input type="text" class="form-control" name="lp" value="0"/>
+					  </div>
+					</div>
+					<div class="form-group col-lg-4">
+					  <label class="col-lg-3 control-label">Q:</label>
+					  <div class="col-lg-9">
+						<input type="text" class="form-control" name="lq" value="0"/>
+					  </div>
+					</div>
+					<div class="form-group col-lg-4">
+					  <label class="col-lg-3 control-label">R:</label>
+					  <div class="col-lg-9">
+						<input type="text" class="form-control" name="lr" value="0"/>
+					  </div>
+					</div>
+				</div>
+			  </div>
+			</fieldset>
+		</form>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" id="customConsNodeCloseBtn" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" id="customConsNodeBtn">Save</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>

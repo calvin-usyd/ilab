@@ -1,0 +1,124 @@
+<div class="modal fade" id="modalSolverSpas" tabindex="-1" role="dialog" aria-labelledby="modalSolverSpasLabel">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h4 class="modal-title" id="modalSolverSpasLabel">Solver SPAS</h4>
+	  </div>
+	  <div class="modal-body">
+		<!-- Nav tabs -->
+		  <ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#analysisType" role="tab" data-toggle="tab">Analysis Type</a></li>
+			<li role="presentation"><a href="#time" role="tab" data-toggle="tab">Time</a></li>
+			<!--li role="presentation"><a href="#controls" role="tab" data-toggle="tab">Controls</a></li-->
+		  </ul>
+		  <!-- Tab panes -->
+		  <div class="tab-content row"><br/>
+			<div role="tabpanel" class="tab-pane active" id="analysisType">
+				<form class="form-horizontal">
+				<div class="form-group col-lg-6">
+					<label class="col-lg-3 control-label">Problem Type:</label>
+					<div class="col-lg-9">
+						<div class="well">
+							<label><input type="radio" name="problemType1" value="1"> Water Flow &nbsp; &nbsp;</label>
+							<label><input type="radio" name="problemType1" value="2"> Solute Transport &nbsp;  &nbsp;</label>
+							<label><input type="radio" name="problemType1" value="3" id="coupledAnalyses"> Both (Coupled Analyses)  &nbsp;  &nbsp;</label>
+						</div>
+						<div class="well">
+							<label><input type="radio" name="problemType2" value="1"> Steady-State &nbsp; &nbsp;</label>
+							<label><input type="radio" name="problemType2" value="2"> Time-Dependent &nbsp; &nbsp;</label>
+							<label><input type="radio" name="problemType2" value="3" id="mixProblemType2" disabled=""> Mixed &nbsp; &nbsp;</label>
+						</div>
+						<div class="well">
+							<label><input type="radio" name="problemType3" value="1"> Saturated &nbsp; &nbsp;</label>
+							<label><input type="radio" name="problemType3" value="2" id="unsaturated"> Unsaturated &nbsp; &nbsp;</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-lg-6">
+					<div class="col-lg-8">
+						<div class="list-group">
+							<p class="list-group-item">
+								Description:<br/>
+								Transient Saturated Solute Transport<br/><br/>
+								Equation 1:<br/>
+								Transient RDAE: 
+							</p>
+							<p class="list-group-item">
+								RDAE: Reactive Diffusion-Advection Equation<br/>
+								URDAE: Unsaturated Reactive Diffusion-Advection Equation
+							</p>
+						</div>
+					</div>
+				</div>
+				</form>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="time">
+				<!--div class="row">
+						<fieldset>
+							<legend>Time Station at which Solution is Required</legend-->
+						<form class="form-horizontal well">
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Specify Individual Time Stations:</label>
+								<div class="col-lg-8 checkbox">
+									<label><input type="checkbox" name="specifyTimeStations"></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Time Station List (Separated by commas): </label>
+								<div class="col-lg-8 inputH">
+									<input type="text" name="timeStationList" class="form-control" placeholder="26, 47, 69" disabled><br/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Specify Time Interval:</label>
+								<div class="col-lg-8 checkbox">
+									<label><input type="checkbox" name="specifyTimeInterval" checked></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Starting Time:</label>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="timeStart" class="form-control" value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">End Time:</label>
+								<div class="col-lg-8 inputH">
+									<input type="number" name="timeEnd" class="form-control" value="100">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Number of Time Stations in the Interval:</label>
+								<div class="col-lg-1 radio">
+									<input type="radio" name="timeTypeRadio" value="timeStationNumberRadio" checked onclick="$('input[name=timeStationNumber]').prop('disabled', false);$('input[name=timeStep]').prop('disabled', true);"> 
+								</div>
+								<div class="col-lg-7 inputH">
+									<input type="number" name="timeStationNumber" class="form-control" value="2">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">Time Step:</label>
+								<div class="col-lg-1 radio">
+									<input type="radio" name="timeTypeRadio" value="timeStepRadio"  onclick="$('input[name=timeStationNumber]').prop('disabled', true);$('input[name=timeStep]').prop('disabled', false);">
+								</div>
+								<div class="col-lg-7 inputH">
+									<input type="number" name="timeStep" class="form-control"  value="2" disabled>
+								</div>
+							</div>
+						</form>
+						<!--/fieldset>
+				</div-->
+			</div>
+			<!--div role="tabpanel" class="tab-pane" id="controls">
+				<div class="row">
+				</div>
+			</div-->
+		  </div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" id="modalSolverSpasBtn">Save</button>
+	  </div>
+	</div>
+  </div>
+</div>

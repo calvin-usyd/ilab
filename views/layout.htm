@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+	<title>{{isset(@title) ? @title : 'Physics particle drawing simulation'}} | PREPS</title>
+	<!-- Description, Keywords and Author -->
+	<meta name="description" content="Physics particle drawing simulation | PREPS">
+	<meta name="keywords" content="Physics particle drawing simulation">
+	<meta name="author" content="PREPS">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--base href="http://115.146.94.238/ilab/"/-->
+	<base href="{{@appPath}}"/>
+	<link rel="shortcut icon" href="views/css/img/cow.jpg">
+	<link rel="stylesheet" href="views/css/main.css" >
+	<link rel="stylesheet" href="shared/bootstrap/css/bootstrap.min.css" media="screen">
+	
+	<!--script src="/views/jquery-ui-1.11.4/external/jquery/jquery.js"></script>
+	<script src="/views/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="//quantumfi.com.au/shared/bootstrap/js/bootstrap.min.js"></script-->
+</head>
+
+<body ondragstart="return false" onselectstart="return false" oncontextmenu="return false">
+	
+	<div id="prepsCover">
+	
+		<div class="coverBg">
+			<h1 class="col-lg-12 text-center">iLab</h1>
+		</div>
+	</div>
+	<main class="container" id="preps">
+	<div class="row">
+		
+		<CHECK if="{{isset(@err_message)}}">
+		<div class="alert alert-dismissible alert-danger">{{@err_message}}</div> 
+		</CHECK>
+		<CHECK if="{{isset(@message)}}">
+		<div class="alert alert-dismissible alert-success">{{@message}}</div> 
+		</CHECK>
+		<CHECK if="{{isset(@warn_message)}}">
+		<div class="alert alert-dismissible alert-warning">{{@warn_message}}</div> 
+		</CHECK>
+		
+		<article class="col-lg-12">
+			<include href="{{ @inc }}" />
+		</article>
+	</div>
+	</main>
+	
+	<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="main.js"></script-->
+</body>
+</html>

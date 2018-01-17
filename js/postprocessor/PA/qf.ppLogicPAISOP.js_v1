@@ -1,0 +1,140 @@
+"use strict";
+
+QF.ppLogic = function(){
+
+this.reloadGraph = function(){
+	location.reload();
+}
+this.loadAll = function(){
+	cm.loadProgress();
+	$.ajax({
+		url:'/paisopOutput/' + $('#projName').attr('data'),
+		type: "POST",
+		success:ppLg.loadGraph
+	});
+}
+this.initHotData = function(nodeForceArr, memberForceArr, memberArr, dispArr){	
+	QF.setting.hotNodesForce.loadData(_.map(nodeForceArr, function(o){
+		return {nodeIndex:o[0], nForceX:o[1], nForceY:o[2]};
+	}));
+	QF.setting.hotElemForce.loadData(_.map(memberForceArr, function(o){
+		return {memberIndex:o[0], membersForce:o[1]};
+	}));
+	QF.setting.hotElemCons.loadData(_.map(memberArr, function(o){
+		return {memberIndex:o[0], area:o[3], youngModulus:o[4], temp:o[5], LOF:o[6], alpha:o[7], ro:o[8]};
+	}));
+	QF.setting.hotDisplacement.loadData(_.map(dispArr, function(o){
+		return {nodeIndex:o[0], dispX:o[1], dispY:o[2]};
+	}));
+}
+this.loadGraph = function(json){
+	var data = cm.getJsonObj(json);
+	cm.hideProgress();
+	if (data[0] == 'Danger'){
+		alert(data[1]);
+		return;
+	}
+	var 
+	nodePointArr = ppLg.processStr2Arr(data.nodePointArr),
+	nodeForceArr = ppLg.processStr2Arr(data.nodeForceArr),
+	nodeDispRotaArr = ppLg.processStr2Arr(data.nodeDispRotaArr),
+	memberArr = ppLg.processStr2Arr(data.memberArr),
+	memberPropPressArr = ppLg.processStr2Arr(data.memberPropPressArr),
+	stressResultantArr = ppLg.processStr2Arr(data.stressResultantArr)
+	;
+	console.log(data);
+	var newNodeCoor = ppLg.getNewNodeDisp(nodePointArr, nodeDispRotaArr, nodeForceArr);
+	var memberForceColr = ppLg.getMemberColr(memberPropPressArr, memberArr.length);
+	ppLg.drawGraph(newNodeCoor, memberArr, memberForceColr);
+	ppLg.initHotData(nodeForceArr, memberPropPressArr, memberArr, nodeDispRotaArr);
+}
+this.genForceArrow = function(nodeForceArr, newNodeCoor){
+	var nodeInd, forces, nodeCoor, nodeOArr;
+	var lineG, arrowR, arrowL, arrowDest, arrowTriangleLen=5;
+	var scale=100;
+	if (nodeForceArr[0] > 10000){
+		scale=2000;
+	}
+	_.forEach(nodeForceArr, function(nForceO){
+		nodeInd = nForceO[0];
+		forces = {x:ppLg.noNotation(nForceO[1]), y:ppLg.noNotation(nForceO[2])};
+		nodeCoor = _.find(newNodeCoor, function(o){return o.i==nodeInd;});
+		arrowDest = {x:nodeCoor.x + forces.x, y:nodeCoor.y + forces.y/scale};
+		arrowR = {x:arrowDest.x+arrowTriangleLen, y:arrowDest.y+arrowTriangleLen}
+		arrowL = {x:arrowDest.x-arrowTriangleLen, y:arrowDest.y+arrowTriangleLen}
+		
+		var lineG = new PIXI.Graphics();
+		lineG.lineStyle(5, 0x00ffff, 1);
+		
+		lineG.moveTo(nodeCoor.x, nodeCoor.y);
+		lineG.lineTo(arrowDest.x, arrowDest.y);
+		lineG.lineTo(arrowR.x, arrowR.y);		
+		lineG.lineTo(arrowL.x, arrowL.y);
+		lineG.lineTo(arrowDest.x, arrowDest.y);
+		
+		lineG.position.set(nodeCoor.x, nodeCoor.y);
+		lineG.pivot.set(nodeCoor.x, nodeCoor.y);
+		if (forces.y < 0){
+			lineG.rotation =  Math.PI;
+		}
+		if (forces.x < 0){
+			lineG.rotation =  -Math.PI/2;			
+		}else if (forces.x > 0){
+			lineG.rotation =  Math.PI/2;			
+		}
+		stage.addChild(lineG);
+	});
+}
+this.getMemberColr = function(memberForceArr, memberCount){
+	var memberForceMapped = _.map(memberForceArr, function(m){
+		return ppLg.noNotation(m[1]);
+	});
+	var memberForceSorted = _.sortBy(memberForceMapped);
+	var hm = heatmap();
+	hm.setColorPalette(HeatmapConfig);
+	hm.setData(memberForceSorted[0], memberForceSorted[memberCount-1], 15);
+	hm.renderBar();
+	return hm.getColors(memberForceMapped);
+}
+this.drawGraph = function(newNodeCoor, memberArr, memberForceColr){
+	_.forEach(newNodeCoor, function(node){
+		lgFE.drawNode(node);		
+	});
+	var hasMemberForceColr = memberForceColr.length == memberArr.length;
+	_.forEach(memberArr, function(member, ind){
+		lgFE.drawElement(member.splice(1), true, {color:hasMemberForceColr ? memberForceColr[ind].colorHex : 0x000});
+	});
+}
+this.getNewNodeDisp = function(nodePointArr, dispArr, nodeForceArr){
+	var scale = 0.100;
+	var lp=0, lq=0;//, dispX=0, dispY=0;
+	/*if (nodePointArr[0].x > 5000 || nodePointArr[0].y > 5000 || nodePointArr[1].x > 5000 || nodePointArr[1].y > 5000 ){
+		scale = 10;
+	}*/
+	return _.map(nodePointArr, function(nodeO, ind){
+		var forceObj = _.flatten(_.filter(nodeForceArr, function(o){
+			return o[0] === nodeO[0];
+		}));
+		lp=0, lq=0;
+		if (forceObj.length > 0){
+			lp = ppLg.noNotation(forceObj[1]);
+			lq = ppLg.noNotation(forceObj[2]);
+		}
+		var dispO=dispArr[nodeO[0]-1];
+		var dispX=0, dispY=0;
+		if (typeof dispO !== "undefined"){
+			dispX = (dispO[1]) === 'NaN' ? o : ppLg.noNotation(dispO[1]);
+			dispY = (dispO[2]) === 'NaN' ? o : ppLg.noNotation(dispO[2]);
+		}
+		var newO = mapP.user(
+			nodeO[7]/scale + dispX, 
+			nodeO[8]/scale + dispY
+		);
+		newO.c={lp:lp, lq:lq, rx: nodeO[1], ry:nodeO[2], rz:0};
+		newO.i=nodeO[0];
+		return newO;
+	});
+}
+}
+QF.ppLogic.prototype = new QF.ppLogic;
+QF.ppLogic.prototype.constructor = QF.ppLogic;
